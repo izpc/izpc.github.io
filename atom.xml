@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>编码漫谈</title>
+  
+  
+  <link href="https://izpc.org/atom.xml" rel="self"/>
+  
+  <link href="https://izpc.org/"/>
+  <updated>2023-12-09T12:47:56.259Z</updated>
+  <id>https://izpc.org/</id>
+  
+  <author>
+    <name>半瓶水研究员</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ChatGPT 发布一周年感想</title>
+    <link href="https://izpc.org/2023/11/30/chatgpt-one-year/"/>
+    <id>https://izpc.org/2023/11/30/chatgpt-one-year/</id>
+    <published>2023-11-30T04:00:00.000Z</published>
+    <updated>2023-12-09T12:47:56.259Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/2023/11/30/chatgpt-one-year/neural_network_with_dark_background.png"></p><p>2022 年 11 月 30 日，ChatGPT 全球发布，开创了大语言模型的新时代。</p><p>从最开始的毫不在乎到现在的离不开，感受到的不只是震撼。</p><p>以前使用 Siri 总是觉着很蠢听不懂人话，而现在的 ChatGPT 从直观反馈来说，应该是不仅仅能听懂还能理解（所谓的人类理解），就算你中文夹杂着英文也是可以的，感觉语言的巴别塔好像被攻破了。</p><p>但是我觉着，如果将 ChatGPT 作为“好用”工具，主要体现在两点，理解需求和知识集合，这两点缺一不可，同时也相辅相成。</p><h3 id="一、理解需求"><a href="#一、理解需求" class="headerlink" title="一、理解需求"></a>一、理解需求</h3><p>很多人凭着新鲜感试用了下，感觉回答的也就很一般，不好用，甚至觉着它不明白我要问什么。可是真的是这样吗？</p><p>首先，很多人连需求都没有理清楚，而且有时候说话是有上下文的，想想看，如果一个陌生人突然问你“吃饭了吗”，你知道他究竟是什么意思吗？</p><p>GPT4 出来的时候我问了问题，它会将你的需求描述一下，按照它的理解方式去执行，这一点就很厉害了，因为现实中很多人都做不到。</p><p>当然，缺点也很明显， token 长度，就如同人的记忆，当然还是越大越好，就好像你的朋友一样，越熟悉越明白。</p><h3 id="二、知识集合"><a href="#二、知识集合" class="headerlink" title="二、知识集合"></a>二、知识集合</h3><p>ChatGPT 如果只是能理解你说的话虽然是进步但是也不会特别好用，主要是 OpenAI 这个公司整理了很多高质量数据，互联网海洋般的数据。</p><p>这一点才是我主要付费的原因，得益于互联网开放的精神，可能也恰恰是这些高质量数据才能通过量变引起质变。</p><p>现在 ChatGPT 就像一个特别好的老师，拥有整个互联网知识，而如何向老师学习在于你是如何使用的。</p><p>你可以问问题，你也可以将你理解的问题找他对答案，着实有趣。</p><p>当然，还是有一些专有知识无从获取，这点它就不如人意了，会出现一本正经的胡说八道了，这点也是广为诟病的问题。</p><p>所以它可以辅助你，但你最好是个专家能够辨别出 1% 这种级别的错误。对于编程倒是很好确定，执行下就行了，但是对于无法验证的领域就有些危险了。</p><h3 id="预测推理"><a href="#预测推理" class="headerlink" title="预测推理"></a>预测推理</h3><p>预测是我使用后最明显的感受，打字机效果的输出。通过我粗浅的分析，感觉人类也只不过是做了一些高级的预测，就好像说话一样——你真的懂你为什么说出下一个字吗？是不是脱口而出呢？</p><p>而推理如同思考一样，人脑也是，如果想一想再回答，那么效果可能会相对好些，也许 GPT 这条路可能会对人类的模拟更加进了一步！</p><h3 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h3><p>语言使人类产生文明，那么以后的人工智能时代是不是能够产生新的文明呢？</p><p>目前还不得而知，但是有一点即将发生，那就是改变生产关系。　</p>]]></content>
+    
+    
+    <summary type="html">这是最好的时代，也是最坏的时代。</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://izpc.org/2023/11/30/hello-world/"/>
+    <id>https://izpc.org/2023/11/30/hello-world/</id>
+    <published>2023-11-30T00:00:00.000Z</published>
+    <updated>2023-12-09T12:47:56.263Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>

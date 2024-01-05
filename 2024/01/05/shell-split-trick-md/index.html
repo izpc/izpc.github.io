@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="问题这段代码有什么问题？ 1split -b $SPLIT_SIZE &quot;$file&quot; &quot;$&#123;file&#125;_part-&quot;  答：如果是一行行的记录，在按照字节切割的时候会出现断行 解决方案我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照100mb 文件大小 GPT: split 命令可以用来将文件分割">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell-split-trick.md">
+<meta property="og:url" content="https://izpc.org/2024/01/05/shell-split-trick-md/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="问题这段代码有什么问题？ 1split -b $SPLIT_SIZE &quot;$file&quot; &quot;$&#123;file&#125;_part-&quot;  答：如果是一行行的记录，在按照字节切割的时候会出现断行 解决方案我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照100mb 文件大小 GPT: split 命令可以用来将文件分割">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-01-05T09:28:36.000Z">
+<meta property="article:modified_time" content="2024-01-05T09:54:41.986Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>shell-split-trick.md</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/01/05/english-example/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/01/05/shell-split-trick-md/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/01/05/shell-split-trick-md/&text=shell-split-trick.md"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/01/05/shell-split-trick-md/&is_video=false&description=shell-split-trick.md"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=shell-split-trick.md&body=Check out this article: https://izpc.org/2024/01/05/shell-split-trick-md/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/01/05/shell-split-trick-md/&name=shell-split-trick.md&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/01/05/shell-split-trick-md/&t=shell-split-trick.md"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">2.1.</span> <span class="toc-text">后记</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        shell-split-trick.md
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-01-05T09:28:36.000Z" class="dt-published" itemprop="datePublished">2024-01-05</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>这段代码有什么问题？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b <span class="variable">$SPLIT_SIZE</span> <span class="string">&quot;<span class="variable">$file</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;file&#125;</span>_part-&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>答：如果是一行行的记录，在按照字节切割的时候会出现断行</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照100mb 文件大小</p>
+<p>GPT: <code>split</code> 命令可以用来将文件分割成多个小文件。<code>-b</code> 参数可以用来指定每个小文件的大小。例如，如果你想将文件分割成每个100MB的小文件，可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 100m file_name</span><br></pre></td></tr></table></figure>
+
+<p>这将创建一系列的文件，名字为 <code>xaa</code>, <code>xab</code>, <code>xac</code> 等等，每个文件的大小都接近100MB。</p>
+<p>但是，这种方法可能会在某些行的中间切割文件，这可能会导致问题，因为被切割的行可能无法正确解析。</p>
+<p>如果你希望在分割文件时保持完整的行，那么你可以使用 <code>-C</code> 参数。这个参数允许你指定每个输出文件的最大行数，但是 <code>split</code> 命令会保证每个输出文件不会在一行的中间结束。例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 100m file_name</span><br></pre></td></tr></table></figure>
+
+<p>这将创建一系列的文件，每个文件的大小都接近但不超过100MB，并且每个文件都会在一个完整的行结束。但是，这个命令可能会导致每个输出文件的大小略微超过你指定的大小，因为它会包含最后一个完整的行，即使这会导致文件的大小超过你指定的大小。</p>
+<p>注意：<code>-C</code> 参数可能在一些老版本的 <code>split</code> 中不可用。</p>
+<p>我：详细解释下 -C 和 -b 的区别？</p>
+<p>GPT: <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数都用于指定输出文件的大小，但是它们在处理文件的行尾时有所不同。</p>
+<p><code>-b</code> 参数指定了每个输出文件的字节大小。例如，<code>split -b 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近100MB的小文件。这个命令将在指定的字节位置处分割文件，不考虑这个位置是否在一行的中间。</p>
+<p>另一方面，<code>-C</code> 参数也用于指定每个输出文件的字节大小，但是它会保证每个输出文件在一个完整的行结束。例如，<code>split -C 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近但不超过100MB的小文件，而且每个文件都会在一个完整的行结束。这意味着，如果一个文件的大小正好是100MB，但是最后一个字节恰好在一行的中间，那么 <code>split</code> 命令会将这整行包含在当前文件中，而不是将它分割到下一个文件中。这可能会导致输出文件的大小略微超过你指定的大小。</p>
+<p>总的来说，如果你希望严格控制输出文件的大小，并且不关心文件是否在一行的中间被分割，那么你应该使用 <code>-b</code> 参数。如果你希望每个输出文件都在一个完整的行结束，那么你应该使用 <code>-C</code> 参数，但是这可能会导致输出文件的大小略微超过你指定的大小。</p>
+<p>我：请给我一些测试代码测试这两个区别的实现</p>
+<p>GPT: 好的，让我们创建一个包含多行文本的文件，然后使用 <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数来分割它。</p>
+<p>首先，我们创建一个文本文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;This is line 1</span></span><br><span class="line"><span class="string">This is line 2</span></span><br><span class="line"><span class="string">This is line 3</span></span><br><span class="line"><span class="string">This is line 4</span></span><br><span class="line"><span class="string">This is line 5&quot;</span> &gt; testfile.txt</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们可以使用 <code>-b</code> 参数来分割这个文件。我们将每个输出文件的大小设置为15字节：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 15 testfile.txt test_b_</span><br></pre></td></tr></table></figure>
+
+<p>如果你查看 <code>test_b_aa</code> 和 <code>test_b_ab</code> 文件，你会看到它们被分割在了 “line 1” 和 “This is line 2” 之间，这是因为 “This is line 1\n” 正好是15字节。</p>
+<p>现在，我们使用 <code>-C</code> 参数来分割同一个文件。我们还是将每个输出文件的大小设置为15字节：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 15 testfile.txt test_C_</span><br></pre></td></tr></table></figure>
+
+<p>这次，如果你查看 <code>test_C_aa</code> 和 <code>test_C_ab</code> 文件，你会看到它们被分割在了 “This is line 1” 和 “This is line 2” 之间，即使 “This is line 1\n” 超过了15字节。这是因为 <code>-C</code> 参数保证了每个输出文件都在一个完整的行结束。</p>
+<p>请注意，这个例子是为了演示 <code>-b</code> 和 <code>-C</code> 参数的行为，实际上在大多数情况下，你会使用更大的文件和更大的输出文件大小。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经过测试 15 字节是测不出来的，要 25，同时如果设为 5 字节（少于每行的字节数）也是有问题的，可以试试</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">2.1.</span> <span class="toc-text">后记</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/01/05/shell-split-trick-md/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/01/05/shell-split-trick-md/&text=shell-split-trick.md"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/01/05/shell-split-trick-md/&is_video=false&description=shell-split-trick.md"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=shell-split-trick.md&body=Check out this article: https://izpc.org/2024/01/05/shell-split-trick-md/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/01/05/shell-split-trick-md/&title=shell-split-trick.md"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/01/05/shell-split-trick-md/&name=shell-split-trick.md&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/01/05/shell-split-trick-md/&t=shell-split-trick.md"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

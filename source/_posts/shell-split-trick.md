@@ -1,7 +1,7 @@
 ---
-title: shell-split-trick.md
+title: shell 命令系列之 split 小技巧
 date: 2024-01-05 17:28:36
-tags:
+tags: shell
 ---
 
 # 问题
@@ -9,16 +9,14 @@ tags:
 这段代码有什么问题？
 
 ```bash
-split -b $SPLIT_SIZE "$file" "${file}_part-"
+split -b $SPLIT_SIZE "$file" "${file}_part_"
 ```
 
 答：如果是一行行的记录，在按照字节切割的时候会出现断行
 
 # 解决方案
 
-
-
-我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照100mb 文件大小
+我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照 100MB 文件大小
 
 GPT: `split` 命令可以用来将文件分割成多个小文件。`-b` 参数可以用来指定每个小文件的大小。例如，如果你想将文件分割成每个100MB的小文件，可以使用以下命令：
 

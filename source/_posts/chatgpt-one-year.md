@@ -1,11 +1,9 @@
 ---
 title: ChatGPT 发布一周年感想
 date: 2023-11-30 12:00:00
-tags:
+tags: GPT
 description: 这是最好的时代，也是最坏的时代。
 ---
-
-![](neural_network_with_dark_background.png)
 
 2022 年 11 月 30 日，ChatGPT 全球发布，开创了大语言模型的新时代。
 

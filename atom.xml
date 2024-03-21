@@ -6,7 +6,7 @@
   <link href="https://izpc.org/atom.xml" rel="self"/>
   
   <link href="https://izpc.org/"/>
-  <updated>2024-02-10T15:21:01.946Z</updated>
+  <updated>2024-03-21T01:40:12.383Z</updated>
   <id>https://izpc.org/</id>
   
   <author>
@@ -17,38 +17,20 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>孤独是人的主题</title>
-    <link href="https://izpc.org/2024/02/10/2024-02-10/"/>
-    <id>https://izpc.org/2024/02/10/2024-02-10/</id>
-    <published>2024-02-10T15:14:30.000Z</published>
-    <updated>2024-02-10T15:21:01.946Z</updated>
+    <title>让 JupyterHub 支持 LDAP</title>
+    <link href="https://izpc.org/2024/03/21/let-jupyterhub-support-ldap/"/>
+    <id>https://izpc.org/2024/03/21/let-jupyterhub-support-ldap/</id>
+    <published>2024-03-21T01:25:03.000Z</published>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
-    <content type="html"><![CDATA[<p>新年走一招发现没有人关注你，终究是自己不够强大，强大到别人需要你，当然除了家人另当别论之外。<br>人终究要面对的主题是孤独，目前的状态是渺小的孤独，但是我更希望的是强大的孤独。<br>所以对于无关紧要的宿命总是要消耗这种孤独，但是对于终极目标的宿命则是掌握这种孤独。<br>当前所说的有些缥缈，但是从中英体系感受到了一些思维的差异以及导致的最终的结果有些强烈的感受。<br>所以，抓紧这个目标，成就自己，成就另一种孤独。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;新年走一招发现没有人关注你，终究是自己不够强大，强大到别人需要你，当然除了家人另当别论之外。&lt;br&gt;人终究要面对的主题是孤独，目前的状态是渺小的孤独，但是我更希望的是强大的孤独。&lt;br&gt;所以对于无关紧要的宿命总是要消耗这种孤独，但是对于终极目标的宿命则是掌握这种孤独。&lt;br</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>人性的弱点</title>
-    <link href="https://izpc.org/2024/02/09/2024-02-09/"/>
-    <id>https://izpc.org/2024/02/09/2024-02-09/</id>
-    <published>2024-02-09T15:51:32.000Z</published>
-    <updated>2024-02-10T15:21:01.946Z</updated>
-    
-    <content type="html"><![CDATA[<p>如果发现一种生意是一直是有需要的，就是人性的弱点，我们大部分人都是在寻求一种解药，比如最简单的是生病吃药，而看不见的则是情绪药————无形且最有效的。好比我不开心了，需要购买快乐价值；我生气了，需要购买发泄价值；我失落了，需要购买认同价值，总之，总有一种你需要的“解药”来解决问题。这种生意尽管利用了人性但是却可持续，不过在玩弄情绪的同时要注意尊重个体，不要自欺，跟不能欺人，不然极易反噬。</p><p>生活不如意是十之八九，新的一年，龙年愿望我只求一个————知行合一</p>]]></content>
+    <content type="html"><![CDATA[<p>JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持</p><p>下面是一段 Dockerfile, 用于修复这个问题</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> jupyterhub/k8s-hub:latest</span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root </span><br><span class="line"><span class="comment"># Fix LDAP authenticator use_ssl issue</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> FILEPATH=`python -c <span class="string">&quot;import pkg_resources; import os; print(os.path.join(pkg_resources.get_distribution(&#x27;jupyterhub-ldapauthenticator&#x27;).location, &#x27;ldapauthenticator&#x27;, &#x27;ldapauthenticator.py&#x27;))&quot;</span>` &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">sed -i <span class="string">&#x27;s/ldap3.AUTO_BIND_NO_TLS if self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/ldap3.AUTO_BIND_NO_TLS if not self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/g&#x27;</span> <span class="variable">$&#123;FILEPATH&#125;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> jovyan</span><br></pre></td></tr></table></figure>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;如果发现一种生意是一直是有需要的，就是人性的弱点，我们大部分人都是在寻求一种解药，比如最简单的是生病吃药，而看不见的则是情绪药————无形且最有效的。好比我不开心了，需要购买快乐价值；我生气了，需要购买发泄价值；我失落了，需要购买认同价值，总之，总有一种你需要的“解药”来解</summary>
+    <summary type="html">&lt;p&gt;JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持&lt;/p&gt;
+&lt;p&gt;下面是一段 Dockerfile, 用于修复这个问题&lt;/p&gt;
+&lt;figure class=&quot;highlight dockerfile&quot;&gt;&lt;tab</summary>
       
     
     
@@ -58,37 +40,19 @@
   
   <entry>
     <title>手机和电脑</title>
-    <link href="https://izpc.org/2024/02/08/2024-02-08/"/>
-    <id>https://izpc.org/2024/02/08/2024-02-08/</id>
+    <link href="https://izpc.org/2024/02/08/mobile-and-pc/"/>
+    <id>https://izpc.org/2024/02/08/mobile-and-pc/</id>
     <published>2024-02-08T03:27:48.000Z</published>
-    <updated>2024-02-10T15:21:01.946Z</updated>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
-    <content type="html"><![CDATA[<p>最近在手机和电脑间切换，发现手机主要用于娱乐，使用上主要是方便，而电脑则是用于工作，使用上主要是偏向效率。这两点的根本不同不能过于颠倒，比如你说用手机工作，用电脑娱乐。这种总是有些拧巴，为什么？<br>手机当前主要是触摸屏幕，所以对于容错性比较高的场景适用，而且最好是没有输入键盘的操作<br>电脑由于大部分不是触屏，所以对于精确效率的场景比较合适，尤其是键盘这种输入设备的操作<br>手机主要在于便携和多传感器，可以认为是一个采集终端<br>电脑主要在于物理设备和硬件，可以看作是一个处理中心<br>仔细品，看看现在这两个设备上的应用有哪些不同，以及流行的分别是什么就知道了，同时在开发对应的应用的同时也要按照这种设计顺应不同的方向，别搞反了，除非你是主打“差异化”</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;最近在手机和电脑间切换，发现手机主要用于娱乐，使用上主要是方便，而电脑则是用于工作，使用上主要是偏向效率。这两点的根本不同不能过于颠倒，比如你说用手机工作，用电脑娱乐。这种总是有些拧巴，为什么？&lt;br&gt;手机当前主要是触摸屏幕，所以对于容错性比较高的场景适用，而且最好是没有输</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>一步一步走</title>
-    <link href="https://izpc.org/2024/02/07/2024-02-07/"/>
-    <id>https://izpc.org/2024/02/07/2024-02-07/</id>
-    <published>2024-02-07T15:04:57.000Z</published>
-    <updated>2024-02-10T15:21:01.946Z</updated>
-    
-    <content type="html"><![CDATA[<p>早上要迟到了，急忙赶上车导致身体极大的不适，心脏供血不足有种半死状态。等到恢复过来后一身冷汗，同时大脑也在飞速的运转。<br>为什么要至于自己到这种窘迫地步————早行动一些不行吗？<br>“临时抱佛脚”这种习惯其实已经保持很久了，有种历史惯性无法改变，至少可以确定的是没有“知行合一”<br>如果真的明白“知行合一”，抛去主观因素，其实也就不存在“临时抱佛脚”这一说了，其实生活不是电影，往往最后的幸运是不现实的，如果真想成功，那么要有足够的自信，而自信又来源于平时的积累<br>成功大部分是幸运的，但失败往往是点滴积累的<br>以前我总是想要一把梭哈，但是实际发现水滴石穿才是最有力量的，因为时间会带给你一切</p>]]></content>
+    <content type="html"><![CDATA[<p>最近在手机和电脑间切换，发现手机主要用于娱乐，使用上主要是方便，而电脑则是用于工作，使用上主要是偏向效率。</p><p>这两点的根本不同不能过于颠倒，比如你说用手机工作，用电脑娱乐。这种总是有些拧巴，为什么？</p><p>手机当前主要是触摸屏幕，所以对于容错性比较高的场景适用，而且最好是没有输入键盘的操作</p><p>电脑由于大部分不是触屏，所以对于精确效率的场景比较合适，尤其是键盘这种输入设备的操作</p><p>手机主要在于便携和多传感器，可以认为是一个采集终端</p><p>电脑主要在于物理设备和硬件，可以看作是一个处理中心</p><p>仔细品，看看现在这两个设备上的应用有哪些不同，以及流行的分别是什么就知道了，同时在开发对应的应用的同时也要按照这种设计顺应不同的方向，别搞反了，除非你是主打“差异化”</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;早上要迟到了，急忙赶上车导致身体极大的不适，心脏供血不足有种半死状态。等到恢复过来后一身冷汗，同时大脑也在飞速的运转。&lt;br&gt;为什么要至于自己到这种窘迫地步————早行动一些不行吗？&lt;br&gt;“临时抱佛脚”这种习惯其实已经保持很久了，有种历史惯性无法改变，至少可以确定的是没有</summary>
+    <summary type="html">&lt;p&gt;最近在手机和电脑间切换，发现手机主要用于娱乐，使用上主要是方便，而电脑则是用于工作，使用上主要是偏向效率。&lt;/p&gt;
+&lt;p&gt;这两点的根本不同不能过于颠倒，比如你说用手机工作，用电脑娱乐。这种总是有些拧巴，为什么？&lt;/p&gt;
+&lt;p&gt;手机当前主要是触摸屏幕，所以对于容错性比较高的场</summary>
       
     
     
@@ -97,13 +61,13 @@
   </entry>
   
   <entry>
-    <title>shell-split-trick.md</title>
-    <link href="https://izpc.org/2024/01/05/shell-split-trick-md/"/>
-    <id>https://izpc.org/2024/01/05/shell-split-trick-md/</id>
+    <title>shell 命令系列之 split 小技巧</title>
+    <link href="https://izpc.org/2024/01/05/shell-split-trick/"/>
+    <id>https://izpc.org/2024/01/05/shell-split-trick/</id>
     <published>2024-01-05T09:28:36.000Z</published>
-    <updated>2024-02-10T15:21:01.954Z</updated>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>这段代码有什么问题？</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b <span class="variable">$SPLIT_SIZE</span> <span class="string">&quot;<span class="variable">$file</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;file&#125;</span>_part-&quot;</span></span><br></pre></td></tr></table></figure><p>答：如果是一行行的记录，在按照字节切割的时候会出现断行</p><h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照100mb 文件大小</p><p>GPT: <code>split</code> 命令可以用来将文件分割成多个小文件。<code>-b</code> 参数可以用来指定每个小文件的大小。例如，如果你想将文件分割成每个100MB的小文件，可以使用以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，名字为 <code>xaa</code>, <code>xab</code>, <code>xac</code> 等等，每个文件的大小都接近100MB。</p><p>但是，这种方法可能会在某些行的中间切割文件，这可能会导致问题，因为被切割的行可能无法正确解析。</p><p>如果你希望在分割文件时保持完整的行，那么你可以使用 <code>-C</code> 参数。这个参数允许你指定每个输出文件的最大行数，但是 <code>split</code> 命令会保证每个输出文件不会在一行的中间结束。例如：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，每个文件的大小都接近但不超过100MB，并且每个文件都会在一个完整的行结束。但是，这个命令可能会导致每个输出文件的大小略微超过你指定的大小，因为它会包含最后一个完整的行，即使这会导致文件的大小超过你指定的大小。</p><p>注意：<code>-C</code> 参数可能在一些老版本的 <code>split</code> 中不可用。</p><p>我：详细解释下 -C 和 -b 的区别？</p><p>GPT: <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数都用于指定输出文件的大小，但是它们在处理文件的行尾时有所不同。</p><p><code>-b</code> 参数指定了每个输出文件的字节大小。例如，<code>split -b 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近100MB的小文件。这个命令将在指定的字节位置处分割文件，不考虑这个位置是否在一行的中间。</p><p>另一方面，<code>-C</code> 参数也用于指定每个输出文件的字节大小，但是它会保证每个输出文件在一个完整的行结束。例如，<code>split -C 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近但不超过100MB的小文件，而且每个文件都会在一个完整的行结束。这意味着，如果一个文件的大小正好是100MB，但是最后一个字节恰好在一行的中间，那么 <code>split</code> 命令会将这整行包含在当前文件中，而不是将它分割到下一个文件中。这可能会导致输出文件的大小略微超过你指定的大小。</p><p>总的来说，如果你希望严格控制输出文件的大小，并且不关心文件是否在一行的中间被分割，那么你应该使用 <code>-b</code> 参数。如果你希望每个输出文件都在一个完整的行结束，那么你应该使用 <code>-C</code> 参数，但是这可能会导致输出文件的大小略微超过你指定的大小。</p><p>我：请给我一些测试代码测试这两个区别的实现</p><p>GPT: 好的，让我们创建一个包含多行文本的文件，然后使用 <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数来分割它。</p><p>首先，我们创建一个文本文件：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;This is line 1</span></span><br><span class="line"><span class="string">This is line 2</span></span><br><span class="line"><span class="string">This is line 3</span></span><br><span class="line"><span class="string">This is line 4</span></span><br><span class="line"><span class="string">This is line 5&quot;</span> &gt; testfile.txt</span><br></pre></td></tr></table></figure><p>然后，我们可以使用 <code>-b</code> 参数来分割这个文件。我们将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 15 testfile.txt test_b_</span><br></pre></td></tr></table></figure><p>如果你查看 <code>test_b_aa</code> 和 <code>test_b_ab</code> 文件，你会看到它们被分割在了 “line 1” 和 “This is line 2” 之间，这是因为 “This is line 1\n” 正好是15字节。</p><p>现在，我们使用 <code>-C</code> 参数来分割同一个文件。我们还是将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 15 testfile.txt test_C_</span><br></pre></td></tr></table></figure><p>这次，如果你查看 <code>test_C_aa</code> 和 <code>test_C_ab</code> 文件，你会看到它们被分割在了 “This is line 1” 和 “This is line 2” 之间，即使 “This is line 1\n” 超过了15字节。这是因为 <code>-C</code> 参数保证了每个输出文件都在一个完整的行结束。</p><p>请注意，这个例子是为了演示 <code>-b</code> 和 <code>-C</code> 参数的行为，实际上在大多数情况下，你会使用更大的文件和更大的输出文件大小。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经过测试 15 字节是测不出来的，要 25，同时如果设为 5 字节（少于每行的字节数）也是有问题的，可以试试</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>这段代码有什么问题？</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b <span class="variable">$SPLIT_SIZE</span> <span class="string">&quot;<span class="variable">$file</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;file&#125;</span>_part_&quot;</span></span><br></pre></td></tr></table></figure><p>答：如果是一行行的记录，在按照字节切割的时候会出现断行</p><h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照 100MB 文件大小</p><p>GPT: <code>split</code> 命令可以用来将文件分割成多个小文件。<code>-b</code> 参数可以用来指定每个小文件的大小。例如，如果你想将文件分割成每个100MB的小文件，可以使用以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，名字为 <code>xaa</code>, <code>xab</code>, <code>xac</code> 等等，每个文件的大小都接近100MB。</p><p>但是，这种方法可能会在某些行的中间切割文件，这可能会导致问题，因为被切割的行可能无法正确解析。</p><p>如果你希望在分割文件时保持完整的行，那么你可以使用 <code>-C</code> 参数。这个参数允许你指定每个输出文件的最大行数，但是 <code>split</code> 命令会保证每个输出文件不会在一行的中间结束。例如：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，每个文件的大小都接近但不超过100MB，并且每个文件都会在一个完整的行结束。但是，这个命令可能会导致每个输出文件的大小略微超过你指定的大小，因为它会包含最后一个完整的行，即使这会导致文件的大小超过你指定的大小。</p><p>注意：<code>-C</code> 参数可能在一些老版本的 <code>split</code> 中不可用。</p><p>我：详细解释下 -C 和 -b 的区别？</p><p>GPT: <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数都用于指定输出文件的大小，但是它们在处理文件的行尾时有所不同。</p><p><code>-b</code> 参数指定了每个输出文件的字节大小。例如，<code>split -b 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近100MB的小文件。这个命令将在指定的字节位置处分割文件，不考虑这个位置是否在一行的中间。</p><p>另一方面，<code>-C</code> 参数也用于指定每个输出文件的字节大小，但是它会保证每个输出文件在一个完整的行结束。例如，<code>split -C 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近但不超过100MB的小文件，而且每个文件都会在一个完整的行结束。这意味着，如果一个文件的大小正好是100MB，但是最后一个字节恰好在一行的中间，那么 <code>split</code> 命令会将这整行包含在当前文件中，而不是将它分割到下一个文件中。这可能会导致输出文件的大小略微超过你指定的大小。</p><p>总的来说，如果你希望严格控制输出文件的大小，并且不关心文件是否在一行的中间被分割，那么你应该使用 <code>-b</code> 参数。如果你希望每个输出文件都在一个完整的行结束，那么你应该使用 <code>-C</code> 参数，但是这可能会导致输出文件的大小略微超过你指定的大小。</p><p>我：请给我一些测试代码测试这两个区别的实现</p><p>GPT: 好的，让我们创建一个包含多行文本的文件，然后使用 <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数来分割它。</p><p>首先，我们创建一个文本文件：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;This is line 1</span></span><br><span class="line"><span class="string">This is line 2</span></span><br><span class="line"><span class="string">This is line 3</span></span><br><span class="line"><span class="string">This is line 4</span></span><br><span class="line"><span class="string">This is line 5&quot;</span> &gt; testfile.txt</span><br></pre></td></tr></table></figure><p>然后，我们可以使用 <code>-b</code> 参数来分割这个文件。我们将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 15 testfile.txt test_b_</span><br></pre></td></tr></table></figure><p>如果你查看 <code>test_b_aa</code> 和 <code>test_b_ab</code> 文件，你会看到它们被分割在了 “line 1” 和 “This is line 2” 之间，这是因为 “This is line 1\n” 正好是15字节。</p><p>现在，我们使用 <code>-C</code> 参数来分割同一个文件。我们还是将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 15 testfile.txt test_C_</span><br></pre></td></tr></table></figure><p>这次，如果你查看 <code>test_C_aa</code> 和 <code>test_C_ab</code> 文件，你会看到它们被分割在了 “This is line 1” 和 “This is line 2” 之间，即使 “This is line 1\n” 超过了15字节。这是因为 <code>-C</code> 参数保证了每个输出文件都在一个完整的行结束。</p><p>请注意，这个例子是为了演示 <code>-b</code> 和 <code>-C</code> 参数的行为，实际上在大多数情况下，你会使用更大的文件和更大的输出文件大小。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经过测试 15 字节是测不出来的，要 25，同时如果设为 5 字节（少于每行的字节数）也是有问题的，可以试试</p>]]></content>
     
     
       
@@ -115,36 +79,18 @@
     
     
     
-  </entry>
-  
-  <entry>
-    <title>english-example.md</title>
-    <link href="https://izpc.org/2024/01/05/english-example/"/>
-    <id>https://izpc.org/2024/01/05/english-example/</id>
-    <published>2024-01-05T04:00:05.000Z</published>
-    <updated>2024-02-10T15:21:01.954Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="我的问题"><a href="#我的问题" class="headerlink" title="我的问题"></a>我的问题</h1><p>我需要你写一个 prompt，实现如下需求，我的母语是中文，分析我写的英文技术博客，请修改我的技术文章达到雅思8分水平，并且标注出我写的文章的单词和语法操作，并给出英语语句合理的陈述方式，根据文章内容推测我的英语水平，在文章下面给出一些推荐的单词和短语，并评测文章的好坏，主要目的是能够帮助我达到英语母语水平写技术文章，可以在原文章上通过markdown以及颜色合理标记出修改部分</p><h2 id="GPT"><a href="#GPT" class="headerlink" title="GPT"></a>GPT</h2><p>好的，这是一个你可以使用的prompt。注意，我会使用Markdown的格式进行注释和修改，因此你需要在支持Markdown的编辑器中查看它。我会使用<code>~~strikethrough~~</code>来表示我建议删除的部分，<code>**bold**</code>来表示我建议添加的部分，以及<code>&gt; quote</code>来提供对修改的解释和评价。</p><hr><p>原文：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你的英文技术博客原文</span><br></pre></td></tr></table></figure><p>修改后：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你的英文技术博客修改后的版本</span><br></pre></td></tr></table></figure><p>修改说明：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. ~~删除的句子或词~~ **添加的句子或词** </span><br><span class="line">   &gt; 这里是对修改的解释和评价，包括语法、词汇使用、句子结构等方面的讨论。我会提供更自然或更准确的英语表达方式，以及解释为什么这样修改更好。</span><br><span class="line"></span><br><span class="line">2. ~~删除的句子或词~~ **添加的句子或词** </span><br><span class="line">   &gt; 这里是对修改的解释和评价，包括语法、词汇使用、句子结构等方面的讨论。我会提供更自然或更准确的英语表达方式，以及解释为什么这样修改更好。</span><br></pre></td></tr></table></figure><p>根据你的文章，我推测你的英语水平是：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里我会基于你的文章内容，分析并推测你的英语水平，包括语法、词汇、句子结构等方面。</span><br></pre></td></tr></table></figure><p>这是一些我推荐你使用的单词和短语：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- 单词/短语1：解释和使用场景</span><br><span class="line">- 单词/短语2：解释和使用场景</span><br><span class="line">- 单词/短语3：解释和使用场景</span><br></pre></td></tr></table></figure><p>文章评价：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里我会对你的文章进行总体评价，包括文章的结构、内容、语言等方面。我会提出一些改进的建议，帮助你提高你的英语写作能力，尤其是技术文章的写作能力。</span><br></pre></td></tr></table></figure><hr><p>希望这个prompt能够帮助你改进你的英语技术文章写作。</p><h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>Today I learn about kakfa knowledge, and also know about “geek time” website.<br>I feel I should not limit myself for study and the future.<br>So I need study english and programming technology every day and even more I should blog my study everyday.</p><p>It’s a start for beginning now. I can be super indivial for combining chatgpt, I think my future will come.</p><h1 id="ChatGPT"><a href="#ChatGPT" class="headerlink" title="ChatGPT"></a>ChatGPT</h1><p>Revision:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Today, I delved into Kafka knowledge and discovered the &quot;Geek Time&quot; website. I believe I shouldn&#x27;t limit my learning journey or my future. Therefore, I need to study English and programming technology daily. Furthermore, I should document my learning progress through daily blogging.</span><br><span class="line"></span><br><span class="line">This is just the beginning. By integrating ChatGPT into my learning process, I&#x27;m confident about the promising future ahead.</span><br></pre></td></tr></table></figure><p>Revision Explanation:</p><ol><li><p><del>Today I learn about kakfa knowledge, and also know about “geek time” website.</del> <strong>Today, I delved into Kafka knowledge and discovered the “Geek Time” website.</strong></p><blockquote><p>The revised sentence provides a more active and detailed description of your actions. “Delved into” suggests a deeper level of engagement with the material, and “discovered” suggests the novelty of finding the website.</p></blockquote></li><li><p><del>I feel I should not limit myself for study and the future.</del> <strong>I believe I shouldn’t limit my learning journey or my future.</strong></p><blockquote><p>“Believe” is a stronger term than “feel” in this context, and “learning journey” is a more descriptive and engaging term than “study.”</p></blockquote></li><li><p><del>So I need study english and programming technology every day and even more I should blog my study everyday.</del> <strong>Therefore, I need to study English and programming technology daily. Furthermore, I should document my learning progress through daily blogging.</strong></p><blockquote><p>The revised sentence provides a clearer structure and flow. “Document my learning progress” is a more precise and formal way to describe the act of blogging about your studies.</p></blockquote></li><li><p><del>It’s a start for beginning now. I can be super indivial for combining chatgpt, I think my future will come.</del> <strong>This is just the beginning. By integrating ChatGPT into my learning process, I’m confident about the promising future ahead.</strong></p><blockquote><p>The revised sentence has a more positive and confident tone. “Integrating ChatGPT into my learning process” is a clearer way to describe your use of ChatGPT, and “the promising future ahead” is a more positive and optimistic view of the future.</p></blockquote></li></ol><p>Based on your text, I would estimate that your English level is intermediate. You have a good grasp of basic sentence structure and vocabulary, but there are some areas where your phrasing could be more natural and fluent.</p><p>Here are some words and phrases I recommend you use:</p><ul><li>“Delve into”: This phrase means to deeply engage or invest time in a topic or subject.</li><li>“Learning journey”: This is a more descriptive and engaging term than “study,” and it implies a continuous process of growth and discovery.</li><li>“Document my learning progress”: This is a more formal and precise way to describe the act of blogging about your studies.</li></ul><p>Overall, your blog post shows a clear commitment to learning and self-improvement, which is commendable. The content is straightforward and to the point. However, you could benefit from using more descriptive language and varying your sentence structure to make your writing more engaging. Keep practicing and don’t hesitate to use tools like ChatGPT to assist you in your learning journey!</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;我的问题&quot;&gt;&lt;a href=&quot;#我的问题&quot; class=&quot;headerlink&quot; title=&quot;我的问题&quot;&gt;&lt;/a&gt;我的问题&lt;/h1&gt;&lt;p&gt;我需要你写一个 prompt，实现如下需求，我的母语是中文，分析我写的英文技术博客，请修改我的技术文章达到雅思8分水平，并且</summary>
-      
-    
-    
-    
+    <category term="shell" scheme="https://izpc.org/tags/shell/"/>
     
   </entry>
   
   <entry>
-    <title>http-status-code.md</title>
+    <title>HTTP 状态码</title>
     <link href="https://izpc.org/2024/01/03/http-status-code/"/>
     <id>https://izpc.org/2024/01/03/http-status-code/</id>
     <published>2024-01-03T10:13:47.000Z</published>
-    <updated>2024-02-10T15:21:01.954Z</updated>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>HTTP状态码用于表示一个HTTP请求是否成功，以及在不成功的情况下出现了什么类型的错误。状态码分为几个范围，每个范围代表了一类响应。</p><p>1xx（100-199）：信息性状态码，表示接收的请求正在处理。<br>2xx（200-299）：成功状态码，表示请求正常处理完毕。<br>3xx（300-399）：重定向状态码，要完成请求需要进一步操作。<br>4xx（400-499）：客户端错误状态码，表示请求有语法错误或请求无法实现。<br>5xx（500-599）：服务器错误状态码，表示服务器在处理请求时发生了错误。</p><h2 id="针对您提到的状态码"><a href="#针对您提到的状态码" class="headerlink" title="针对您提到的状态码"></a>针对您提到的状态码</h2><p>101：这是一个信息性（1xx）状态码，表示服务器理解了客户端的请求，并且通过这个状态码告知客户端它将切换到请求的协议，这通常用在WebSockets协议切换中。</p><p>499：这个状态码实际上不是一个官方的HTTP状态码，它是由Nginx定义的，用来表示客户端在服务器有机会发送回响应之前关闭了连接。也就是说，当服务器准备发送回响应，但是发现客户端已经关闭了连接时，Nginx会记录这个状态码。这通常发生在客户端取消了请求的情况下。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>HTTP状态码用于表示一个HTTP请求是否成功，以及在不成功的情况下出现了什么类型的错误。状态码分为几个范围，每个范围代表了一类响应。</p><p>1xx（100-199）：信息性状态码，表示接收的请求正在处理。<br>2xx（200-299）：成功状态码，表示请求正常处理完毕。<br>3xx（300-399）：重定向状态码，要完成请求需要进一步操作。<br>4xx（400-499）：客户端错误状态码，表示请求有语法错误或请求无法实现。<br>5xx（500-599）：服务器错误状态码，表示服务器在处理请求时发生了错误。</p><h2 id="不常见的状态码"><a href="#不常见的状态码" class="headerlink" title="不常见的状态码"></a>不常见的状态码</h2><p>101：这是一个信息性（1xx）状态码，表示服务器理解了客户端的请求，并且通过这个状态码告知客户端它将切换到请求的协议，这通常用在WebSockets协议切换中。</p><p>499：这个状态码实际上不是一个官方的HTTP状态码，它是由Nginx定义的，用来表示客户端在服务器有机会发送回响应之前关闭了连接。也就是说，当服务器准备发送回响应，但是发现客户端已经关闭了连接时，Nginx会记录这个状态码。这通常发生在客户端取消了请求的情况下。</p>]]></content>
     
     
       
@@ -155,25 +101,7 @@
     
     
     
-  </entry>
-  
-  <entry>
-    <title>io-model.md</title>
-    <link href="https://izpc.org/2024/01/03/io-model-md/"/>
-    <id>https://izpc.org/2024/01/03/io-model-md/</id>
-    <published>2024-01-03T03:00:05.000Z</published>
-    <updated>2024-02-10T15:21:01.954Z</updated>
-    
-    <content type="html"><![CDATA[<p>I&#x2F;O 模型（输入&#x2F;输出模型）是指计算机系统中数据传输的方式，特别是如何从输入设备读取数据以及如何向输出设备发送数据。在计算机网络和操作系统设计中，I&#x2F;O 模型尤为重要，因为它们决定了程序是如何与外部环境（如磁盘、网络等）进行通信的。主要的 I&#x2F;O 模型包括：</p><h2 id="阻塞-I-O（Blocking-I-O）："><a href="#阻塞-I-O（Blocking-I-O）：" class="headerlink" title="阻塞 I&#x2F;O（Blocking I&#x2F;O）："></a>阻塞 I&#x2F;O（Blocking I&#x2F;O）：</h2><p>工作方式：应用程序发起一个 I&#x2F;O 操作后，会被阻塞（即暂停执行），直到 I&#x2F;O 操作完全完成后才继续执行。<br>人话理解：比如你在餐厅点餐，点完餐后就坐在桌边等待，直到服务员把餐端上来，这期间你什么都不做，只等餐。</p><h2 id="非阻塞-I-O（Non-blocking-I-O）："><a href="#非阻塞-I-O（Non-blocking-I-O）：" class="headerlink" title="非阻塞 I&#x2F;O（Non-blocking I&#x2F;O）："></a>非阻塞 I&#x2F;O（Non-blocking I&#x2F;O）：</h2><p>工作方式：应用程序发起一个 I&#x2F;O 操作后，不需要等待操作完成，它可以立即继续执行其他任务。但是，应用程序需要不断检查 I&#x2F;O 操作是否完成，这通常涉及到循环查询。<br>人话理解：你在餐厅点了餐，不过你不坐着等，而是拿着号码牌干别的事情，不时回头看看号码牌是不是被叫到了。</p><h2 id="I-O-多路复用（I-O-Multiplexing）："><a href="#I-O-多路复用（I-O-Multiplexing）：" class="headerlink" title="I&#x2F;O 多路复用（I&#x2F;O Multiplexing）："></a>I&#x2F;O 多路复用（I&#x2F;O Multiplexing）：</h2><p>工作方式：应用程序可以同时等待多个 I&#x2F;O 操作，当任何一个 I&#x2F;O 操作完成时，程序就会被通知并处理该操作。<br>人话理解：你在几个餐厅都点了餐，并且拿了几个号码牌。你不用在一个餐厅里等，而是可以在中间的等待区等着，哪个餐厅先准备好了，就去哪个餐厅取餐。</p><h2 id="信号驱动-I-O（Signal-driven-I-O）："><a href="#信号驱动-I-O（Signal-driven-I-O）：" class="headerlink" title="信号驱动 I&#x2F;O（Signal-driven I&#x2F;O）："></a>信号驱动 I&#x2F;O（Signal-driven I&#x2F;O）：</h2><p>工作方式：应用程序发起一个 I&#x2F;O 操作，并告诉操作系统当 I&#x2F;O 准备好时发送一个信号。在收到信号之前，应用程序不会被阻塞，可以做其他事情。<br>人话理解：你在餐厅点餐，并告诉服务员，当餐准备好了就发个信号（比如发个短信）。你接着去做其他事，直到收到短信，然后去取餐。</p><h2 id="异步-I-O（Asynchronous-I-O）："><a href="#异步-I-O（Asynchronous-I-O）：" class="headerlink" title="异步 I&#x2F;O（Asynchronous I&#x2F;O）："></a>异步 I&#x2F;O（Asynchronous I&#x2F;O）：</h2><p>工作方式：应用程序发起一个 I&#x2F;O 操作后，可以立即开始做其他事情。操作系统会在 I&#x2F;O 操作完成后通知应用程序。<br>人话理解：你通过一个手机app点餐，点完餐之后就去做你的事情，餐准备好了，app会给你一个通知。<br>每种 I&#x2F;O 模型都有其应用场景和优缺点。例如，阻塞 I&#x2F;O 模型编程简单，但效率不高；而异步 I&#x2F;O 模型效率高，但编程复杂。开发者在选择 I&#x2F;O 模型时，需要根据应用的实际需要来决定使用哪种模型。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;I&amp;#x2F;O 模型（输入&amp;#x2F;输出模型）是指计算机系统中数据传输的方式，特别是如何从输入设备读取数据以及如何向输出设备发送数据。在计算机网络和操作系统设计中，I&amp;#x2F;O 模型尤为重要，因为它们决定了程序是如何与外部环境（如磁盘、网络等）进行通信的。主要的 I</summary>
-      
-    
-    
-    
+    <category term="http" scheme="https://izpc.org/tags/http/"/>
     
   </entry>
   
@@ -182,15 +110,17 @@
     <link href="https://izpc.org/2023/11/30/chatgpt-one-year/"/>
     <id>https://izpc.org/2023/11/30/chatgpt-one-year/</id>
     <published>2023-11-30T04:00:00.000Z</published>
-    <updated>2024-02-10T15:21:01.946Z</updated>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="/2023/11/30/chatgpt-one-year/neural_network_with_dark_background.png"></p><p>2022 年 11 月 30 日，ChatGPT 全球发布，开创了大语言模型的新时代。</p><p>从最开始的毫不在乎到现在的离不开，感受到的不只是震撼。</p><p>以前使用 Siri 总是觉着很蠢听不懂人话，而现在的 ChatGPT 从直观反馈来说，应该是不仅仅能听懂还能理解（所谓的人类理解），就算你中文夹杂着英文也是可以的，感觉语言的巴别塔好像被攻破了。</p><p>但是我觉着，如果将 ChatGPT 作为“好用”工具，主要体现在两点，理解需求和知识集合，这两点缺一不可，同时也相辅相成。</p><h3 id="一、理解需求"><a href="#一、理解需求" class="headerlink" title="一、理解需求"></a>一、理解需求</h3><p>很多人凭着新鲜感试用了下，感觉回答的也就很一般，不好用，甚至觉着它不明白我要问什么。可是真的是这样吗？</p><p>首先，很多人连需求都没有理清楚，而且有时候说话是有上下文的，想想看，如果一个陌生人突然问你“吃饭了吗”，你知道他究竟是什么意思吗？</p><p>GPT4 出来的时候我问了问题，它会将你的需求描述一下，按照它的理解方式去执行，这一点就很厉害了，因为现实中很多人都做不到。</p><p>当然，缺点也很明显， token 长度，就如同人的记忆，当然还是越大越好，就好像你的朋友一样，越熟悉越明白。</p><h3 id="二、知识集合"><a href="#二、知识集合" class="headerlink" title="二、知识集合"></a>二、知识集合</h3><p>ChatGPT 如果只是能理解你说的话虽然是进步但是也不会特别好用，主要是 OpenAI 这个公司整理了很多高质量数据，互联网海洋般的数据。</p><p>这一点才是我主要付费的原因，得益于互联网开放的精神，可能也恰恰是这些高质量数据才能通过量变引起质变。</p><p>现在 ChatGPT 就像一个特别好的老师，拥有整个互联网知识，而如何向老师学习在于你是如何使用的。</p><p>你可以问问题，你也可以将你理解的问题找他对答案，着实有趣。</p><p>当然，还是有一些专有知识无从获取，这点它就不如人意了，会出现一本正经的胡说八道了，这点也是广为诟病的问题。</p><p>所以它可以辅助你，但你最好是个专家能够辨别出 1% 这种级别的错误。对于编程倒是很好确定，执行下就行了，但是对于无法验证的领域就有些危险了。</p><h3 id="预测推理"><a href="#预测推理" class="headerlink" title="预测推理"></a>预测推理</h3><p>预测是我使用后最明显的感受，打字机效果的输出。通过我粗浅的分析，感觉人类也只不过是做了一些高级的预测，就好像说话一样——你真的懂你为什么说出下一个字吗？是不是脱口而出呢？</p><p>而推理如同思考一样，人脑也是，如果想一想再回答，那么效果可能会相对好些，也许 GPT 这条路可能会对人类的模拟更加进了一步！</p><h3 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h3><p>语言使人类产生文明，那么以后的人工智能时代是不是能够产生新的文明呢？</p><p>目前还不得而知，但是有一点即将发生，那就是改变生产关系。　</p>]]></content>
+    <content type="html"><![CDATA[<p>2022 年 11 月 30 日，ChatGPT 全球发布，开创了大语言模型的新时代。</p><p>从最开始的毫不在乎到现在的离不开，感受到的不只是震撼。</p><p>以前使用 Siri 总是觉着很蠢听不懂人话，而现在的 ChatGPT 从直观反馈来说，应该是不仅仅能听懂还能理解（所谓的人类理解），就算你中文夹杂着英文也是可以的，感觉语言的巴别塔好像被攻破了。</p><p>但是我觉着，如果将 ChatGPT 作为“好用”工具，主要体现在两点，理解需求和知识集合，这两点缺一不可，同时也相辅相成。</p><h3 id="一、理解需求"><a href="#一、理解需求" class="headerlink" title="一、理解需求"></a>一、理解需求</h3><p>很多人凭着新鲜感试用了下，感觉回答的也就很一般，不好用，甚至觉着它不明白我要问什么。可是真的是这样吗？</p><p>首先，很多人连需求都没有理清楚，而且有时候说话是有上下文的，想想看，如果一个陌生人突然问你“吃饭了吗”，你知道他究竟是什么意思吗？</p><p>GPT4 出来的时候我问了问题，它会将你的需求描述一下，按照它的理解方式去执行，这一点就很厉害了，因为现实中很多人都做不到。</p><p>当然，缺点也很明显， token 长度，就如同人的记忆，当然还是越大越好，就好像你的朋友一样，越熟悉越明白。</p><h3 id="二、知识集合"><a href="#二、知识集合" class="headerlink" title="二、知识集合"></a>二、知识集合</h3><p>ChatGPT 如果只是能理解你说的话虽然是进步但是也不会特别好用，主要是 OpenAI 这个公司整理了很多高质量数据，互联网海洋般的数据。</p><p>这一点才是我主要付费的原因，得益于互联网开放的精神，可能也恰恰是这些高质量数据才能通过量变引起质变。</p><p>现在 ChatGPT 就像一个特别好的老师，拥有整个互联网知识，而如何向老师学习在于你是如何使用的。</p><p>你可以问问题，你也可以将你理解的问题找他对答案，着实有趣。</p><p>当然，还是有一些专有知识无从获取，这点它就不如人意了，会出现一本正经的胡说八道了，这点也是广为诟病的问题。</p><p>所以它可以辅助你，但你最好是个专家能够辨别出 1% 这种级别的错误。对于编程倒是很好确定，执行下就行了，但是对于无法验证的领域就有些危险了。</p><h3 id="预测推理"><a href="#预测推理" class="headerlink" title="预测推理"></a>预测推理</h3><p>预测是我使用后最明显的感受，打字机效果的输出。通过我粗浅的分析，感觉人类也只不过是做了一些高级的预测，就好像说话一样——你真的懂你为什么说出下一个字吗？是不是脱口而出呢？</p><p>而推理如同思考一样，人脑也是，如果想一想再回答，那么效果可能会相对好些，也许 GPT 这条路可能会对人类的模拟更加进了一步！</p><h3 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h3><p>语言使人类产生文明，那么以后的人工智能时代是不是能够产生新的文明呢？</p><p>目前还不得而知，但是有一点即将发生，那就是改变生产关系。　</p>]]></content>
     
     
     <summary type="html">这是最好的时代，也是最坏的时代。</summary>
     
     
     
+    
+    <category term="GPT" scheme="https://izpc.org/tags/GPT/"/>
     
   </entry>
   
@@ -199,7 +129,7 @@
     <link href="https://izpc.org/2023/11/30/hello-world/"/>
     <id>https://izpc.org/2023/11/30/hello-world/</id>
     <published>2023-11-30T00:00:00.000Z</published>
-    <updated>2024-02-10T15:21:01.954Z</updated>
+    <updated>2024-03-21T01:40:12.383Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
     

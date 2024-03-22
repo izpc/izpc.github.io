@@ -1,7 +1,7 @@
 ---
 title: 让 JupyterHub 支持 LDAP
 date: 2024-03-21 09:25:03
-tags:
+tags: [JupyterHub, LDAP]
 ---
 
 JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持

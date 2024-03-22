@@ -1,7 +1,7 @@
 ---
-title: shell 命令系列之 split 小技巧
+title: Shell 命令系列之 split 小技巧
 date: 2024-01-05 17:28:36
-tags: shell
+tags: Shell
 ---
 
 # 问题

@@ -4,6 +4,46 @@
   
     
     <entry>
+      <title>ChatGPT 帮助之 S3 移动对象</title>
+      <link href="/2024/03/21/chatgpt-help-s3-move-object/"/>
+      <url>/2024/03/21/chatgpt-help-s3-move-object/</url>
+      
+        <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><blockquote><p>如何将 s3:&#x2F;&#x2F;foobar&#x2F;expense&#x2F;2023&#x2F;12&#x2F;02 00:00:00&#x2F;2023-12-02 00:00:00.json 这个路径移动为 s3:&#x2F;&#x2F;foobar&#x2F;expense&#x2F;2023&#x2F;12&#x2F;02&#x2F;2023-12-02.json，并将2023-12-01 到今天的全部处理，最少python脚本实现</p></blockquote><h1 id="回答"><a href="#回答" class="headerlink" title="回答"></a>回答</h1><p>要将 S3 中的对象从一个键移动到另一个键，您需要执行一个复制操作，然后删除原始对象。在AWS中，移动并不是一个原子操作，而是由复制（COPY）和删除（DELETE）操作组成的。</p><p>下面是一个Python脚本示例，它使用<code>boto3</code>库（这是AWS的官方Python SDK）来移动指定日期范围内的文件。这个脚本会遍历给定日期范围内的每一天，构建原始和目标键，并执行必要的复制和删除操作。</p><p>安装<code>boto3</code>库（如果尚未安装）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install boto3</span><br></pre></td></tr></table></figure><p>Python脚本：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> boto3</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化S3客户端</span></span><br><span class="line">s3_client = boto3.client(<span class="string">&#x27;s3&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义S3桶名称</span></span><br><span class="line">bucket_name = <span class="string">&#x27;foobar&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定日期范围</span></span><br><span class="line">start_date = datetime.datetime(<span class="number">2023</span>, <span class="number">12</span>, <span class="number">1</span>)</span><br><span class="line">end_date = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历日期范围</span></span><br><span class="line">current_date = start_date</span><br><span class="line"><span class="keyword">while</span> current_date &lt;= end_date:</span><br><span class="line">    <span class="comment"># 构建原始和目标键</span></span><br><span class="line">    original_key = <span class="string">f&#x27;expense/<span class="subst">&#123;current_date.year&#125;</span>/<span class="subst">&#123;current_date.month:02d&#125;</span>/<span class="subst">&#123;current_date.day:02d&#125;</span> 00:00:00/<span class="subst">&#123;current_date.strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)&#125;</span> 00:00:00.json&#x27;</span></span><br><span class="line">    new_key = <span class="string">f&#x27;expense/<span class="subst">&#123;current_date.year&#125;</span>/<span class="subst">&#123;current_date.month:02d&#125;</span>/<span class="subst">&#123;current_date.day:02d&#125;</span>/<span class="subst">&#123;current_date.strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)&#125;</span>.json&#x27;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 复制对象</span></span><br><span class="line">    copy_source = &#123;</span><br><span class="line">        <span class="string">&#x27;Bucket&#x27;</span>: bucket_name,</span><br><span class="line">        <span class="string">&#x27;Key&#x27;</span>: original_key</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        s3_client.copy(copy_source, bucket_name, new_key)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Copied: <span class="subst">&#123;original_key&#125;</span> to <span class="subst">&#123;new_key&#125;</span>&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除原始对象</span></span><br><span class="line">        s3_client.delete_object(Bucket=bucket_name, Key=original_key)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Deleted: <span class="subst">&#123;original_key&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> s3_client.exceptions.NoSuchKey:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;No such key: <span class="subst">&#123;original_key&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Error: <span class="subst">&#123;e&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 移至下一天</span></span><br><span class="line">    current_date += datetime.timedelta(days=<span class="number">1</span>)</span><br></pre></td></tr></table></figure><p>请注意，这个脚本没有处理可能的分页。如果您有很多文件，您可能需要处理S3的分页响应。另外，请确保您的AWS凭证已经配置在环境变量中，或者您已经在<code>.aws/credentials</code>文件中配置了它们，否则您需要在创建<code>boto3.client</code>时手动提供它们。</p><p>在运行此脚本之前，请确保您有足够的权限来执行这些操作，并且您已经备份了重要数据，防止意外丢失。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> GPT </tag>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Echarts 添加堆叠工具选项</title>
+      <link href="/2024/03/21/echarts-toolbox-add-stack/"/>
+      <url>/2024/03/21/echarts-toolbox-add-stack/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://echarts.apache.org/en/option.html#toolbox.feature.magicType">https://echarts.apache.org/en/option.html#toolbox.feature.magicType</a></p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">option = &#123;</span><br><span class="line">    <span class="attr">toolbox</span>: &#123;</span><br><span class="line">        <span class="attr">feature</span>: &#123;</span><br><span class="line">            <span class="attr">magicType</span>: &#123;</span><br><span class="line">                <span class="attr">type</span>: [<span class="string">&#x27;line&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;stack&#x27;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">series</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>type 为 ‘stack’ 时，会将所有的 bar 类型的 series 堆叠在一起。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> ECharts </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>让 JupyterHub 支持 LDAP</title>
       <link href="/2024/03/21/let-jupyterhub-support-ldap/"/>
       <url>/2024/03/21/let-jupyterhub-support-ldap/</url>
@@ -11,6 +51,14 @@
         <content type="html"><![CDATA[<p>JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持</p><p>下面是一段 Dockerfile, 用于修复这个问题</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> jupyterhub/k8s-hub:latest</span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root </span><br><span class="line"><span class="comment"># Fix LDAP authenticator use_ssl issue</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> FILEPATH=`python -c <span class="string">&quot;import pkg_resources; import os; print(os.path.join(pkg_resources.get_distribution(&#x27;jupyterhub-ldapauthenticator&#x27;).location, &#x27;ldapauthenticator&#x27;, &#x27;ldapauthenticator.py&#x27;))&quot;</span>` &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">sed -i <span class="string">&#x27;s/ldap3.AUTO_BIND_NO_TLS if self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/ldap3.AUTO_BIND_NO_TLS if not self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/g&#x27;</span> <span class="variable">$&#123;FILEPATH&#125;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> jovyan</span><br></pre></td></tr></table></figure>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> JupyterHub </tag>
+            
+            <tag> LDAP </tag>
+            
+        </tags>
       
     </entry>
     
@@ -30,7 +78,7 @@
     
     
     <entry>
-      <title>shell 命令系列之 split 小技巧</title>
+      <title>Shell 命令系列之 split 小技巧</title>
       <link href="/2024/01/05/shell-split-trick/"/>
       <url>/2024/01/05/shell-split-trick/</url>
       
@@ -40,7 +88,7 @@
       
         <tags>
             
-            <tag> shell </tag>
+            <tag> Shell </tag>
             
         </tags>
       

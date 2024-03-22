@@ -6,7 +6,7 @@
   <link href="https://izpc.org/atom.xml" rel="self"/>
   
   <link href="https://izpc.org/"/>
-  <updated>2024-03-21T01:40:12.383Z</updated>
+  <updated>2024-03-22T11:23:38.041Z</updated>
   <id>https://izpc.org/</id>
   
   <author>
@@ -17,11 +17,58 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ChatGPT 帮助之 S3 移动对象</title>
+    <link href="https://izpc.org/2024/03/21/chatgpt-help-s3-move-object/"/>
+    <id>https://izpc.org/2024/03/21/chatgpt-help-s3-move-object/</id>
+    <published>2024-03-21T06:46:34.000Z</published>
+    <updated>2024-03-22T11:23:38.041Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><blockquote><p>如何将 s3:&#x2F;&#x2F;foobar&#x2F;expense&#x2F;2023&#x2F;12&#x2F;02 00:00:00&#x2F;2023-12-02 00:00:00.json 这个路径移动为 s3:&#x2F;&#x2F;foobar&#x2F;expense&#x2F;2023&#x2F;12&#x2F;02&#x2F;2023-12-02.json，并将2023-12-01 到今天的全部处理，最少python脚本实现</p></blockquote><h1 id="回答"><a href="#回答" class="headerlink" title="回答"></a>回答</h1><p>要将 S3 中的对象从一个键移动到另一个键，您需要执行一个复制操作，然后删除原始对象。在AWS中，移动并不是一个原子操作，而是由复制（COPY）和删除（DELETE）操作组成的。</p><p>下面是一个Python脚本示例，它使用<code>boto3</code>库（这是AWS的官方Python SDK）来移动指定日期范围内的文件。这个脚本会遍历给定日期范围内的每一天，构建原始和目标键，并执行必要的复制和删除操作。</p><p>安装<code>boto3</code>库（如果尚未安装）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install boto3</span><br></pre></td></tr></table></figure><p>Python脚本：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> boto3</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化S3客户端</span></span><br><span class="line">s3_client = boto3.client(<span class="string">&#x27;s3&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义S3桶名称</span></span><br><span class="line">bucket_name = <span class="string">&#x27;foobar&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定日期范围</span></span><br><span class="line">start_date = datetime.datetime(<span class="number">2023</span>, <span class="number">12</span>, <span class="number">1</span>)</span><br><span class="line">end_date = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历日期范围</span></span><br><span class="line">current_date = start_date</span><br><span class="line"><span class="keyword">while</span> current_date &lt;= end_date:</span><br><span class="line">    <span class="comment"># 构建原始和目标键</span></span><br><span class="line">    original_key = <span class="string">f&#x27;expense/<span class="subst">&#123;current_date.year&#125;</span>/<span class="subst">&#123;current_date.month:02d&#125;</span>/<span class="subst">&#123;current_date.day:02d&#125;</span> 00:00:00/<span class="subst">&#123;current_date.strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)&#125;</span> 00:00:00.json&#x27;</span></span><br><span class="line">    new_key = <span class="string">f&#x27;expense/<span class="subst">&#123;current_date.year&#125;</span>/<span class="subst">&#123;current_date.month:02d&#125;</span>/<span class="subst">&#123;current_date.day:02d&#125;</span>/<span class="subst">&#123;current_date.strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)&#125;</span>.json&#x27;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 复制对象</span></span><br><span class="line">    copy_source = &#123;</span><br><span class="line">        <span class="string">&#x27;Bucket&#x27;</span>: bucket_name,</span><br><span class="line">        <span class="string">&#x27;Key&#x27;</span>: original_key</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        s3_client.copy(copy_source, bucket_name, new_key)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Copied: <span class="subst">&#123;original_key&#125;</span> to <span class="subst">&#123;new_key&#125;</span>&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除原始对象</span></span><br><span class="line">        s3_client.delete_object(Bucket=bucket_name, Key=original_key)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Deleted: <span class="subst">&#123;original_key&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> s3_client.exceptions.NoSuchKey:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;No such key: <span class="subst">&#123;original_key&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Error: <span class="subst">&#123;e&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 移至下一天</span></span><br><span class="line">    current_date += datetime.timedelta(days=<span class="number">1</span>)</span><br></pre></td></tr></table></figure><p>请注意，这个脚本没有处理可能的分页。如果您有很多文件，您可能需要处理S3的分页响应。另外，请确保您的AWS凭证已经配置在环境变量中，或者您已经在<code>.aws/credentials</code>文件中配置了它们，否则您需要在创建<code>boto3.client</code>时手动提供它们。</p><p>在运行此脚本之前，请确保您有足够的权限来执行这些操作，并且您已经备份了重要数据，防止意外丢失。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;如何将 s3:&amp;#x2F;&amp;#x2F;foobar&amp;#x2F;expense&amp;#x2F;2023&amp;#x2F;12&amp;</summary>
+      
+    
+    
+    
+    
+    <category term="GPT" scheme="https://izpc.org/tags/GPT/"/>
+    
+    <category term="Python" scheme="https://izpc.org/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Echarts 添加堆叠工具选项</title>
+    <link href="https://izpc.org/2024/03/21/echarts-toolbox-add-stack/"/>
+    <id>https://izpc.org/2024/03/21/echarts-toolbox-add-stack/</id>
+    <published>2024-03-21T06:15:21.000Z</published>
+    <updated>2024-03-22T11:23:38.041Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://echarts.apache.org/en/option.html#toolbox.feature.magicType">https://echarts.apache.org/en/option.html#toolbox.feature.magicType</a></p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">option = &#123;</span><br><span class="line">    <span class="attr">toolbox</span>: &#123;</span><br><span class="line">        <span class="attr">feature</span>: &#123;</span><br><span class="line">            <span class="attr">magicType</span>: &#123;</span><br><span class="line">                <span class="attr">type</span>: [<span class="string">&#x27;line&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;stack&#x27;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">series</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>type 为 ‘stack’ 时，会将所有的 bar 类型的 series 堆叠在一起。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://echarts.apache.org/en/option.html#toolbox.feature.magicType&quot;&gt;https://echarts.apache.org/en/option.html#toolbox.feature.m</summary>
+      
+    
+    
+    
+    
+    <category term="ECharts" scheme="https://izpc.org/tags/ECharts/"/>
+    
+  </entry>
+  
+  <entry>
     <title>让 JupyterHub 支持 LDAP</title>
     <link href="https://izpc.org/2024/03/21/let-jupyterhub-support-ldap/"/>
     <id>https://izpc.org/2024/03/21/let-jupyterhub-support-ldap/</id>
     <published>2024-03-21T01:25:03.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<p>JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持</p><p>下面是一段 Dockerfile, 用于修复这个问题</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> jupyterhub/k8s-hub:latest</span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> root </span><br><span class="line"><span class="comment"># Fix LDAP authenticator use_ssl issue</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> FILEPATH=`python -c <span class="string">&quot;import pkg_resources; import os; print(os.path.join(pkg_resources.get_distribution(&#x27;jupyterhub-ldapauthenticator&#x27;).location, &#x27;ldapauthenticator&#x27;, &#x27;ldapauthenticator.py&#x27;))&quot;</span>` &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">sed -i <span class="string">&#x27;s/ldap3.AUTO_BIND_NO_TLS if self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/ldap3.AUTO_BIND_NO_TLS if not self.use_ssl else ldap3.AUTO_BIND_TLS_BEFORE_BIND/g&#x27;</span> <span class="variable">$&#123;FILEPATH&#125;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> jovyan</span><br></pre></td></tr></table></figure>]]></content>
     
@@ -36,6 +83,10 @@
     
     
     
+    <category term="JupyterHub" scheme="https://izpc.org/tags/JupyterHub/"/>
+    
+    <category term="LDAP" scheme="https://izpc.org/tags/LDAP/"/>
+    
   </entry>
   
   <entry>
@@ -43,7 +94,7 @@
     <link href="https://izpc.org/2024/02/08/mobile-and-pc/"/>
     <id>https://izpc.org/2024/02/08/mobile-and-pc/</id>
     <published>2024-02-08T03:27:48.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<p>最近在手机和电脑间切换，发现手机主要用于娱乐，使用上主要是方便，而电脑则是用于工作，使用上主要是偏向效率。</p><p>这两点的根本不同不能过于颠倒，比如你说用手机工作，用电脑娱乐。这种总是有些拧巴，为什么？</p><p>手机当前主要是触摸屏幕，所以对于容错性比较高的场景适用，而且最好是没有输入键盘的操作</p><p>电脑由于大部分不是触屏，所以对于精确效率的场景比较合适，尤其是键盘这种输入设备的操作</p><p>手机主要在于便携和多传感器，可以认为是一个采集终端</p><p>电脑主要在于物理设备和硬件，可以看作是一个处理中心</p><p>仔细品，看看现在这两个设备上的应用有哪些不同，以及流行的分别是什么就知道了，同时在开发对应的应用的同时也要按照这种设计顺应不同的方向，别搞反了，除非你是主打“差异化”</p>]]></content>
     
@@ -61,11 +112,11 @@
   </entry>
   
   <entry>
-    <title>shell 命令系列之 split 小技巧</title>
+    <title>Shell 命令系列之 split 小技巧</title>
     <link href="https://izpc.org/2024/01/05/shell-split-trick/"/>
     <id>https://izpc.org/2024/01/05/shell-split-trick/</id>
     <published>2024-01-05T09:28:36.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>这段代码有什么问题？</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b <span class="variable">$SPLIT_SIZE</span> <span class="string">&quot;<span class="variable">$file</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;file&#125;</span>_part_&quot;</span></span><br></pre></td></tr></table></figure><p>答：如果是一行行的记录，在按照字节切割的时候会出现断行</p><h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>我： 使用 shell split 切割文件 如何保证按照文件大小切割并且不断行？比如按照 100MB 文件大小</p><p>GPT: <code>split</code> 命令可以用来将文件分割成多个小文件。<code>-b</code> 参数可以用来指定每个小文件的大小。例如，如果你想将文件分割成每个100MB的小文件，可以使用以下命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，名字为 <code>xaa</code>, <code>xab</code>, <code>xac</code> 等等，每个文件的大小都接近100MB。</p><p>但是，这种方法可能会在某些行的中间切割文件，这可能会导致问题，因为被切割的行可能无法正确解析。</p><p>如果你希望在分割文件时保持完整的行，那么你可以使用 <code>-C</code> 参数。这个参数允许你指定每个输出文件的最大行数，但是 <code>split</code> 命令会保证每个输出文件不会在一行的中间结束。例如：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 100m file_name</span><br></pre></td></tr></table></figure><p>这将创建一系列的文件，每个文件的大小都接近但不超过100MB，并且每个文件都会在一个完整的行结束。但是，这个命令可能会导致每个输出文件的大小略微超过你指定的大小，因为它会包含最后一个完整的行，即使这会导致文件的大小超过你指定的大小。</p><p>注意：<code>-C</code> 参数可能在一些老版本的 <code>split</code> 中不可用。</p><p>我：详细解释下 -C 和 -b 的区别？</p><p>GPT: <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数都用于指定输出文件的大小，但是它们在处理文件的行尾时有所不同。</p><p><code>-b</code> 参数指定了每个输出文件的字节大小。例如，<code>split -b 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近100MB的小文件。这个命令将在指定的字节位置处分割文件，不考虑这个位置是否在一行的中间。</p><p>另一方面，<code>-C</code> 参数也用于指定每个输出文件的字节大小，但是它会保证每个输出文件在一个完整的行结束。例如，<code>split -C 100m file_name</code> 将会把输入文件 <code>file_name</code> 分割成大小接近但不超过100MB的小文件，而且每个文件都会在一个完整的行结束。这意味着，如果一个文件的大小正好是100MB，但是最后一个字节恰好在一行的中间，那么 <code>split</code> 命令会将这整行包含在当前文件中，而不是将它分割到下一个文件中。这可能会导致输出文件的大小略微超过你指定的大小。</p><p>总的来说，如果你希望严格控制输出文件的大小，并且不关心文件是否在一行的中间被分割，那么你应该使用 <code>-b</code> 参数。如果你希望每个输出文件都在一个完整的行结束，那么你应该使用 <code>-C</code> 参数，但是这可能会导致输出文件的大小略微超过你指定的大小。</p><p>我：请给我一些测试代码测试这两个区别的实现</p><p>GPT: 好的，让我们创建一个包含多行文本的文件，然后使用 <code>split</code> 命令的 <code>-b</code> 和 <code>-C</code> 参数来分割它。</p><p>首先，我们创建一个文本文件：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;This is line 1</span></span><br><span class="line"><span class="string">This is line 2</span></span><br><span class="line"><span class="string">This is line 3</span></span><br><span class="line"><span class="string">This is line 4</span></span><br><span class="line"><span class="string">This is line 5&quot;</span> &gt; testfile.txt</span><br></pre></td></tr></table></figure><p>然后，我们可以使用 <code>-b</code> 参数来分割这个文件。我们将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -b 15 testfile.txt test_b_</span><br></pre></td></tr></table></figure><p>如果你查看 <code>test_b_aa</code> 和 <code>test_b_ab</code> 文件，你会看到它们被分割在了 “line 1” 和 “This is line 2” 之间，这是因为 “This is line 1\n” 正好是15字节。</p><p>现在，我们使用 <code>-C</code> 参数来分割同一个文件。我们还是将每个输出文件的大小设置为15字节：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">split</span> -C 15 testfile.txt test_C_</span><br></pre></td></tr></table></figure><p>这次，如果你查看 <code>test_C_aa</code> 和 <code>test_C_ab</code> 文件，你会看到它们被分割在了 “This is line 1” 和 “This is line 2” 之间，即使 “This is line 1\n” 超过了15字节。这是因为 <code>-C</code> 参数保证了每个输出文件都在一个完整的行结束。</p><p>请注意，这个例子是为了演示 <code>-b</code> 和 <code>-C</code> 参数的行为，实际上在大多数情况下，你会使用更大的文件和更大的输出文件大小。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>经过测试 15 字节是测不出来的，要 25，同时如果设为 5 字节（少于每行的字节数）也是有问题的，可以试试</p>]]></content>
     
@@ -79,7 +130,7 @@
     
     
     
-    <category term="shell" scheme="https://izpc.org/tags/shell/"/>
+    <category term="Shell" scheme="https://izpc.org/tags/Shell/"/>
     
   </entry>
   
@@ -88,7 +139,7 @@
     <link href="https://izpc.org/2024/01/03/http-status-code/"/>
     <id>https://izpc.org/2024/01/03/http-status-code/</id>
     <published>2024-01-03T10:13:47.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>HTTP状态码用于表示一个HTTP请求是否成功，以及在不成功的情况下出现了什么类型的错误。状态码分为几个范围，每个范围代表了一类响应。</p><p>1xx（100-199）：信息性状态码，表示接收的请求正在处理。<br>2xx（200-299）：成功状态码，表示请求正常处理完毕。<br>3xx（300-399）：重定向状态码，要完成请求需要进一步操作。<br>4xx（400-499）：客户端错误状态码，表示请求有语法错误或请求无法实现。<br>5xx（500-599）：服务器错误状态码，表示服务器在处理请求时发生了错误。</p><h2 id="不常见的状态码"><a href="#不常见的状态码" class="headerlink" title="不常见的状态码"></a>不常见的状态码</h2><p>101：这是一个信息性（1xx）状态码，表示服务器理解了客户端的请求，并且通过这个状态码告知客户端它将切换到请求的协议，这通常用在WebSockets协议切换中。</p><p>499：这个状态码实际上不是一个官方的HTTP状态码，它是由Nginx定义的，用来表示客户端在服务器有机会发送回响应之前关闭了连接。也就是说，当服务器准备发送回响应，但是发现客户端已经关闭了连接时，Nginx会记录这个状态码。这通常发生在客户端取消了请求的情况下。</p>]]></content>
     
@@ -110,7 +161,7 @@
     <link href="https://izpc.org/2023/11/30/chatgpt-one-year/"/>
     <id>https://izpc.org/2023/11/30/chatgpt-one-year/</id>
     <published>2023-11-30T04:00:00.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<p>2022 年 11 月 30 日，ChatGPT 全球发布，开创了大语言模型的新时代。</p><p>从最开始的毫不在乎到现在的离不开，感受到的不只是震撼。</p><p>以前使用 Siri 总是觉着很蠢听不懂人话，而现在的 ChatGPT 从直观反馈来说，应该是不仅仅能听懂还能理解（所谓的人类理解），就算你中文夹杂着英文也是可以的，感觉语言的巴别塔好像被攻破了。</p><p>但是我觉着，如果将 ChatGPT 作为“好用”工具，主要体现在两点，理解需求和知识集合，这两点缺一不可，同时也相辅相成。</p><h3 id="一、理解需求"><a href="#一、理解需求" class="headerlink" title="一、理解需求"></a>一、理解需求</h3><p>很多人凭着新鲜感试用了下，感觉回答的也就很一般，不好用，甚至觉着它不明白我要问什么。可是真的是这样吗？</p><p>首先，很多人连需求都没有理清楚，而且有时候说话是有上下文的，想想看，如果一个陌生人突然问你“吃饭了吗”，你知道他究竟是什么意思吗？</p><p>GPT4 出来的时候我问了问题，它会将你的需求描述一下，按照它的理解方式去执行，这一点就很厉害了，因为现实中很多人都做不到。</p><p>当然，缺点也很明显， token 长度，就如同人的记忆，当然还是越大越好，就好像你的朋友一样，越熟悉越明白。</p><h3 id="二、知识集合"><a href="#二、知识集合" class="headerlink" title="二、知识集合"></a>二、知识集合</h3><p>ChatGPT 如果只是能理解你说的话虽然是进步但是也不会特别好用，主要是 OpenAI 这个公司整理了很多高质量数据，互联网海洋般的数据。</p><p>这一点才是我主要付费的原因，得益于互联网开放的精神，可能也恰恰是这些高质量数据才能通过量变引起质变。</p><p>现在 ChatGPT 就像一个特别好的老师，拥有整个互联网知识，而如何向老师学习在于你是如何使用的。</p><p>你可以问问题，你也可以将你理解的问题找他对答案，着实有趣。</p><p>当然，还是有一些专有知识无从获取，这点它就不如人意了，会出现一本正经的胡说八道了，这点也是广为诟病的问题。</p><p>所以它可以辅助你，但你最好是个专家能够辨别出 1% 这种级别的错误。对于编程倒是很好确定，执行下就行了，但是对于无法验证的领域就有些危险了。</p><h3 id="预测推理"><a href="#预测推理" class="headerlink" title="预测推理"></a>预测推理</h3><p>预测是我使用后最明显的感受，打字机效果的输出。通过我粗浅的分析，感觉人类也只不过是做了一些高级的预测，就好像说话一样——你真的懂你为什么说出下一个字吗？是不是脱口而出呢？</p><p>而推理如同思考一样，人脑也是，如果想一想再回答，那么效果可能会相对好些，也许 GPT 这条路可能会对人类的模拟更加进了一步！</p><h3 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h3><p>语言使人类产生文明，那么以后的人工智能时代是不是能够产生新的文明呢？</p><p>目前还不得而知，但是有一点即将发生，那就是改变生产关系。　</p>]]></content>
     
@@ -129,7 +180,7 @@
     <link href="https://izpc.org/2023/11/30/hello-world/"/>
     <id>https://izpc.org/2023/11/30/hello-world/</id>
     <published>2023-11-30T00:00:00.000Z</published>
-    <updated>2024-03-21T01:40:12.383Z</updated>
+    <updated>2024-03-22T11:23:38.041Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
     

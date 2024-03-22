@@ -14,8 +14,10 @@
 <meta property="og:description" content="JupyterHub 其实是支持的 LDAP 认证，但是模式是 LDAPS，对于没有 LDAP 非加密端口则不支持 下面是一段 Dockerfile, 用于修复这个问题 12345678FROM jupyterhub&#x2F;k8s-hub:latestUSER root # Fix LDAP authenticator use_ssl issueRUN FILEPATH&#x3D;&#96;python -c &amp;quot">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-03-21T01:25:03.000Z">
-<meta property="article:modified_time" content="2024-03-21T01:40:12.383Z">
+<meta property="article:modified_time" content="2024-03-22T11:23:38.041Z">
 <meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="JupyterHub">
+<meta property="article:tag" content="LDAP">
 <meta name="twitter:card" content="summary">
     
     
@@ -82,6 +84,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="上一篇" href="/2024/03/21/echarts-toolbox-add-stack/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" aria-label="下一篇" href="/2024/02/08/mobile-and-pc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -143,6 +147,11 @@
       
 
       
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/JupyterHub/" rel="tag">JupyterHub</a>, <a class="p-category" href="/tags/LDAP/" rel="tag">LDAP</a>
+    </div>
+
 
     </div>
   </header>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Authentik 使用钉钉登录介绍Authentik 是一个开源的身份验证和授权服务，它提供了一种简单的方式来添加用户身份验证和授权功能到您的应用程序中。Authentik 支持多种身份验证方式，包括用户名密码、社交登录、LDAP 等。 钉钉是一款企业级即时通讯和协作工具，它提供了丰富的 API 和 SDK，可以用于集成企业内部系统和第三方应用。 在这个示例中，我们将演示如何使用 Authent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="authentik-use-dingtalk-login">
+<meta property="og:url" content="https://izpc.org/2024/04/10/authentik-use-dingtalk-login/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="Authentik 使用钉钉登录介绍Authentik 是一个开源的身份验证和授权服务，它提供了一种简单的方式来添加用户身份验证和授权功能到您的应用程序中。Authentik 支持多种身份验证方式，包括用户名密码、社交登录、LDAP 等。 钉钉是一款企业级即时通讯和协作工具，它提供了丰富的 API 和 SDK，可以用于集成企业内部系统和第三方应用。 在这个示例中，我们将演示如何使用 Authent">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-10T05:44:53.000Z">
+<meta property="article:modified_time" content="2024-04-10T11:42:44.443Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="authentik">
+<meta property="article:tag" content="dingtalk">
+<meta property="article:tag" content="aws">
+<meta property="article:tag" content="serverless">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>authentik-use-dingtalk-login</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/03/27/chatgpt-help-find-k8s-images/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&text=authentik-use-dingtalk-login"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&is_video=false&description=authentik-use-dingtalk-login"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=authentik-use-dingtalk-login&body=Check out this article: https://izpc.org/2024/04/10/authentik-use-dingtalk-login/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&name=authentik-use-dingtalk-login&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&t=authentik-use-dingtalk-login"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Authentik-%E4%BD%BF%E7%94%A8%E9%92%89%E9%92%89%E7%99%BB%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">Authentik 使用钉钉登录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E9%92%89%E9%92%89%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 创建钉钉应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-OAuth-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">1.1 OAuth 接口说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Authentik"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 配置 Authentik</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9E%E7%8E%B0-OAuth2-%E6%8F%90%E4%BE%9B%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 实现 OAuth2 提供程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">错误排查</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        authentik-use-dingtalk-login
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-04-10T05:44:53.000Z" class="dt-published" itemprop="datePublished">2024-04-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/authentik/" rel="tag">authentik</a>, <a class="p-category" href="/tags/aws/" rel="tag">aws</a>, <a class="p-category" href="/tags/dingtalk/" rel="tag">dingtalk</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/serverless/" rel="tag">serverless</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Authentik-使用钉钉登录"><a href="#Authentik-使用钉钉登录" class="headerlink" title="Authentik 使用钉钉登录"></a>Authentik 使用钉钉登录</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Authentik 是一个开源的身份验证和授权服务，它提供了一种简单的方式来添加用户身份验证和授权功能到您的应用程序中。Authentik 支持多种身份验证方式，包括用户名密码、社交登录、LDAP 等。</p>
+<p>钉钉是一款企业级即时通讯和协作工具，它提供了丰富的 API 和 SDK，可以用于集成企业内部系统和第三方应用。</p>
+<p>在这个示例中，我们将演示如何使用 Authentik 集成钉钉登录，以便用户可以使用他们的钉钉账户登录到您的应用程序中。</p>
+<p>钉钉是有 OAuth2 授权机制的，我们将使用 Authentik 的 OAuth2 提供程序来实现钉钉登录。</p>
+<p>Authentik 的 OAuth2 提供程序允许您将任何符合 OAuth2 标准的身份验证服务集成到 Authentik 中，以便用户可以使用这些服务登录到您的应用程序中。<a target="_blank" rel="noopener" href="https://docs.goauthentik.io/integrations/sources/oauth/">参见文档</a></p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-创建钉钉应用"><a href="#1-创建钉钉应用" class="headerlink" title="1. 创建钉钉应用"></a>1. 创建钉钉应用</h3><p>可以参见 Gitlab 的文档 <a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/integration/ding_talk.html">DingTalk 集成</a> 或 Casdoor 的文档 <a target="_blank" rel="noopener" href="https://casdoor.org/zh/docs/provider/oauth/DingTalk/">DingTalk OAuth</a> 来创建一个钉钉应用。</p>
+<h4 id="1-1-OAuth-接口说明"><a href="#1-1-OAuth-接口说明" class="headerlink" title="1.1 OAuth 接口说明"></a>1.1 OAuth 接口说明</h4><p>参见文档：<a target="_blank" rel="noopener" href="https://open.dingtalk.com/document/orgapp/obtain-identity-credentials">获取登录用户的访问凭证</a></p>
+<p>在 github 找到一个<a target="_blank" rel="noopener" href="https://github.com/directus/directus/discussions/11881">示例</a></p>
+<details>
+<summary>示例代码</summary>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">Dingtalk is an enterprise communication tool similar to Jira/Confluence/WhatApp. It provides OAuth 2 service. The protocol is as below.</span><br><span class="line"></span><br><span class="line">OAuth2 protocol, Dingtalk version</span><br><span class="line">Auth</span><br><span class="line">GET https://login.dingtalk.com/oauth2/auth?</span><br><span class="line">redirect_uri=https%3A%2F%2Fwww.baidu.com%2F&amp;response_type=code&amp;client_id=dingyourclientid&amp;scope=openid&amp;prompt=consent</span><br><span class="line"></span><br><span class="line">The redirect callback after Auth will be with below format:</span><br><span class="line">https://www.baidu.com/?authCode=6b427e8bfab83e93bedd13f16a430702</span><br><span class="line"></span><br><span class="line">Get token</span><br><span class="line">POST https://api.dingtalk.com/v1.0/oauth2/userAccessToken</span><br><span class="line">Content-Type:application/json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;clientId&quot; : &quot;ding your id&quot;,</span><br><span class="line">  &quot;clientSecret&quot; : &quot;your secret&quot;,</span><br><span class="line">  &quot;code&quot; : &quot;6b427e8bfab83e93bedd13f16a430702&quot;,</span><br><span class="line">  &quot;grantType&quot; : &quot;authorization_code&quot;</span><br><span class="line">&#125;</span><br><span class="line">The response will be</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;expireIn&quot;: 7200,</span><br><span class="line">  &quot;accessToken&quot;: &quot;a8f4e3215a703ce9a7164e91dbab53c0&quot;,</span><br><span class="line">  &quot;refreshToken&quot;: &quot;b13e5a61b421342d95d86c9e64c275c6&quot;</span><br><span class="line">&#125;</span><br><span class="line">Retrieve user info</span><br><span class="line">GET https://api.dingtalk.com/v1.0/contact/users/me</span><br><span class="line">x-acs-dingtalk-access-token:a8f4e3215a703ce9a7164e91dbab53c0</span><br><span class="line">Content-Type:application/json</span><br><span class="line"></span><br><span class="line">Response will be</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;nick&quot;: &quot;AWIS ME&quot;,</span><br><span class="line">  &quot;unionId&quot;: &quot;D578iS5hxxxx&quot;,</span><br><span class="line">  &quot;avatarUrl&quot;: &quot;https://static-legacy.dingtalk.com/media/lADPGT5i9m5ZyXDNA4LNAtA_720.jpg&quot;,</span><br><span class="line">  &quot;openId&quot;: &quot;WySPOpXqxE&quot;,</span><br><span class="line">  &quot;mobile&quot;: &quot;1350xxxxxxxx&quot;,</span><br><span class="line">  &quot;stateCode&quot;: &quot;86&quot;,</span><br><span class="line">  &quot;email&quot;: &quot;xxxu@xxx.com&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</details>
+
+
+<p>以及一些其他服务集成的代码样例 <a target="_blank" rel="noopener" href="https://github.com/xu4wang/apiproxy/blob/main/src/handlers/oauth_dingtalk.ts">apiproxy</a> 和 <a target="_blank" rel="noopener" href="https://github.com/ory/kratos/blob/eb67bed1f26d2c7ff10e5481b679b2213b44676d/selfservice/strategy/oidc/provider_dingtalk.go">kratos</a></p>
+<h3 id="2-配置-Authentik"><a href="#2-配置-Authentik" class="headerlink" title="2. 配置 Authentik"></a>2. 配置 Authentik</h3><p>可以参见配置 Twtich 的文档 <a target="_blank" rel="noopener" href="https://docs.goauthentik.io/integrations/sources/twitch/">Twitch 集成</a></p>
+<p>记得要选择 OpenID Connect 作为身份验证类型。</p>
+<p>注意 <code>Scopes</code> 要填写 *openid, <code>Authorization URL</code> 要填写 <a target="_blank" rel="noopener" href="https://login.dingtalk.com/oauth2/auth?prompt=consent">https://login.dingtalk.com/oauth2/auth?prompt=consent</a></p>
+<p>至于 <code>Token URL</code> 和 <code>User Info URL</code> 可以则需要自定义转化服务的 URL， 这是因为钉钉的 OAuth2 接口是非标准的（命名方法不一样，参数内容也有一些细微差异），所以需要自己实现一个 OAuth2 提供程序。可参见<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/666423994">这篇文章</a></p>
+<h3 id="3-实现-OAuth2-提供程序"><a href="#3-实现-OAuth2-提供程序" class="headerlink" title="3. 实现 OAuth2 提供程序"></a>3. 实现 OAuth2 提供程序</h3><p>我是使用 aws serverless 来实现的，代码如下：</p>
+<details>
+<summary> /auth/dingtalk/token </summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> parse_qs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">TOKEN_URL = <span class="string">&#x27;https://api.dingtalk.com/v1.0/oauth2/userAccessToken&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_form_data_to_json</span>(<span class="params">form_data</span>):</span><br><span class="line">    parsed_data = parse_qs(form_data)</span><br><span class="line">    result = &#123;k: v[<span class="number">0</span>] <span class="keyword">for</span> k, v <span class="keyword">in</span> parsed_data.items()&#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">event, context</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;event:\n<span class="subst">&#123;event&#125;</span>&quot;</span>)</span><br><span class="line">    s = event.get(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> event.get(<span class="string">&quot;isBase64Encoded&quot;</span>) <span class="keyword">and</span> s:</span><br><span class="line">        s = b64decode(s).decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">    body = parse_form_data_to_json(s)</span><br><span class="line"></span><br><span class="line">    headers = &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;</span><br><span class="line">    response = requests.post(TOKEN_URL, json=&#123;</span><br><span class="line">        <span class="string">&#x27;clientId&#x27;</span>: body.get(<span class="string">&#x27;client_id&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;clientSecret&#x27;</span>: body.get(<span class="string">&#x27;client_secret&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;code&#x27;</span>: body.get(<span class="string">&#x27;code&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;grantType&#x27;</span>: body.get(<span class="string">&#x27;grant_type&#x27;</span>),</span><br><span class="line">    &#125;, headers=headers)</span><br><span class="line">    response.raise_for_status()</span><br><span class="line">    res = response.json()</span><br><span class="line"></span><br><span class="line">    result = &#123;</span><br><span class="line">        <span class="comment"># &#x27;refresh_token&#x27;: result.get(&#x27;refreshToken&#x27;),</span></span><br><span class="line">        <span class="string">&#x27;access_token&#x27;</span>: res.get(<span class="string">&#x27;accessToken&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;expires_in&#x27;</span>: res.get(<span class="string">&#x27;expiresIn&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;token_type&#x27;</span>: <span class="string">&#x27;Bearer&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;statusCode&quot;</span>: <span class="number">200</span>, <span class="string">&quot;body&quot;</span>: json.dumps(result)&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</details>
+
+<details>
+<summary> /auth/dingtalk/profile </summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">URL = <span class="string">&#x27;https://api.dingtalk.com/v1.0/contact/users/me&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">event, context</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;event:\n<span class="subst">&#123;event&#125;</span>&quot;</span>)</span><br><span class="line">    access_token = event.get(<span class="string">&#x27;headers&#x27;</span>, &#123;&#125;).get(<span class="string">&#x27;authorization&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    access_token = access_token.replace(<span class="string">&#x27;Bearer &#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(access_token)</span><br><span class="line"></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">        <span class="string">&#x27;x-acs-dingtalk-access-token&#x27;</span>: access_token,</span><br><span class="line">    &#125;</span><br><span class="line">    response = requests.get(URL, headers=headers)</span><br><span class="line">    response.raise_for_status()</span><br><span class="line">    user_info = response.json()</span><br><span class="line">    <span class="built_in">print</span>(user_info)</span><br><span class="line"></span><br><span class="line">    result = &#123;</span><br><span class="line">        <span class="comment"># &#x27;issuer&#x27;: userInfoURL,</span></span><br><span class="line">        <span class="comment"># &#x27;picture&#x27;: user_info.get(&#x27;avatarUrl&#x27;),</span></span><br><span class="line">        <span class="string">&#x27;sub&#x27;</span>: user_info[<span class="string">&#x27;openId&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;nickname&#x27;</span>: user_info[<span class="string">&#x27;nick&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: user_info[<span class="string">&#x27;nick&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;email&#x27;</span>: user_info[<span class="string">&#x27;email&#x27;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;statusCode&quot;</span>: <span class="number">200</span>, <span class="string">&quot;body&quot;</span>: json.dumps(result)&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</details>
+
+
+<h4 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h4><p>如果出现 <code>Could not determine id.</code> 的错误，可以参见 <a target="_blank" rel="noopener" href="https://github.com/goauthentik/authentik/blob/main/authentik/sources/oauth/types/oidc.py">源码解决</a> 来解决， 我当时处理少了 sub 参数。报错实现的<a target="_blank" rel="noopener" href="https://github.com/goauthentik/authentik/blob/main/authentik/sources/oauth/views/callback.py#L59">具体代码</a>可以定位。</p>
+<p>在日志中可以根据关键字查找到源码， 日志如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;auth_via&quot;: &quot;unauthenticated&quot;, &quot;domain_url&quot;: &quot;example.com&quot;, &quot;event&quot;: &quot;Authentication Failure&quot;, &quot;host&quot;: &quot;example.com&quot;, &quot;level&quot;: &quot;warning&quot;, &quot;logger&quot;: &quot;authentik.sources.oauth.views.callback&quot;, &quot;pid&quot;: 4721, &quot;reason&quot;: &quot;Could not determine id.&quot;, &quot;request_id&quot;: &quot;28a8d8818c63441da41051455c32d437&quot;, &quot;schema_name&quot;: &quot;public&quot;, &quot;timestamp&quot;: &quot;2024-04-09T10:30:48.464283&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Authentik-%E4%BD%BF%E7%94%A8%E9%92%89%E9%92%89%E7%99%BB%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">Authentik 使用钉钉登录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E9%92%89%E9%92%89%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 创建钉钉应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-OAuth-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">1.1 OAuth 接口说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Authentik"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 配置 Authentik</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9E%E7%8E%B0-OAuth2-%E6%8F%90%E4%BE%9B%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 实现 OAuth2 提供程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">错误排查</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&text=authentik-use-dingtalk-login"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&is_video=false&description=authentik-use-dingtalk-login"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=authentik-use-dingtalk-login&body=Check out this article: https://izpc.org/2024/04/10/authentik-use-dingtalk-login/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&title=authentik-use-dingtalk-login"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&name=authentik-use-dingtalk-login&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/04/10/authentik-use-dingtalk-login/&t=authentik-use-dingtalk-login"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 ---
-title: chatgpt-help-find-k8s-images
+title: ChatGPT 帮助之 Kubectl 查询镜像
 date: 2024-03-27 14:11:24
 tags:
 ---

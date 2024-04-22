@@ -1,5 +1,5 @@
 ---
-title: authentik-use-dingtalk-login
+title: Authentik 使用钉钉登录
 date: 2024-04-10 13:44:53
 tags: [authentik, dingtalk, aws, serverless, python]
 ---

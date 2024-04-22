@@ -4,7 +4,28 @@
   
     
     <entry>
-      <title>authentik-use-dingtalk-login</title>
+      <title>创建 PostgreSQL 用户和数据库</title>
+      <link href="/2024/04/22/create-postgres-user-and-database/"/>
+      <url>/2024/04/22/create-postgres-user-and-database/</url>
+      
+        <content type="html"><![CDATA[<h1 id="简化-SQL-语句，-注意高版本的-PostgreSQL-需要使用-GRANT-命令"><a href="#简化-SQL-语句，-注意高版本的-PostgreSQL-需要使用-GRANT-命令" class="headerlink" title="简化 SQL 语句， 注意高版本的 PostgreSQL 需要使用 GRANT 命令"></a>简化 SQL 语句， 注意高版本的 PostgreSQL 需要使用 <code>GRANT</code> 命令</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">create</span> role foo <span class="keyword">with</span> login password <span class="string">&#x27;yourpassword&#x27;</span> valid until <span class="string">&#x27;infinity&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 高版本需要使用这个命令</span></span><br><span class="line"><span class="keyword">GRANT</span> foo <span class="keyword">TO</span> postgres;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> database bar <span class="keyword">with</span> encoding<span class="operator">=</span><span class="string">&#x27;UTF8&#x27;</span> owner<span class="operator">=</span>foo connection limit<span class="operator">=</span><span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">REVOKE</span> foo <span class="keyword">FROM</span> postgres;</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>Reference: </p><ol><li><a href="https://www.cnblogs.com/zhangpengshou/p/5464610.html">ubuntu下postgreSQL安装配置</a></li><li><a href="https://www.postgresql.org/docs/9.1/backup-dump.html#BACKUP-DUMP-RESTORE">Backup&amp;Restore</a></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> PostgreSQL </tag>
+            
+            <tag> SQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Authentik 使用钉钉登录</title>
       <link href="/2024/04/10/authentik-use-dingtalk-login/"/>
       <url>/2024/04/10/authentik-use-dingtalk-login/</url>
       
@@ -31,7 +52,7 @@
     
     
     <entry>
-      <title>chatgpt-help-find-k8s-images</title>
+      <title>ChatGPT 帮助之 Kubectl 查询镜像</title>
       <link href="/2024/03/27/chatgpt-help-find-k8s-images/"/>
       <url>/2024/03/27/chatgpt-help-find-k8s-images/</url>
       
@@ -141,7 +162,7 @@
       <link href="/2024/01/03/http-status-code/"/>
       <url>/2024/01/03/http-status-code/</url>
       
-        <content type="html"><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>HTTP状态码用于表示一个HTTP请求是否成功，以及在不成功的情况下出现了什么类型的错误。状态码分为几个范围，每个范围代表了一类响应。</p><p>1xx（100-199）：信息性状态码，表示接收的请求正在处理。<br>2xx（200-299）：成功状态码，表示请求正常处理完毕。<br>3xx（300-399）：重定向状态码，要完成请求需要进一步操作。<br>4xx（400-499）：客户端错误状态码，表示请求有语法错误或请求无法实现。<br>5xx（500-599）：服务器错误状态码，表示服务器在处理请求时发生了错误。</p><h2 id="不常见的状态码"><a href="#不常见的状态码" class="headerlink" title="不常见的状态码"></a>不常见的状态码</h2><p>101：这是一个信息性（1xx）状态码，表示服务器理解了客户端的请求，并且通过这个状态码告知客户端它将切换到请求的协议，这通常用在WebSockets协议切换中。</p><p>499：这个状态码实际上不是一个官方的HTTP状态码，它是由Nginx定义的，用来表示客户端在服务器有机会发送回响应之前关闭了连接。也就是说，当服务器准备发送回响应，但是发现客户端已经关闭了连接时，Nginx会记录这个状态码。这通常发生在客户端取消了请求的情况下。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>HTTP状态码用于表示一个HTTP请求是否成功，以及在不成功的情况下出现了什么类型的错误。状态码分为几个范围，每个范围代表了一类响应。</p><p>1xx（100-199）：信息性状态码，表示接收的请求正在处理。<br>2xx（200-299）：成功状态码，表示请求正常处理完毕。<br>3xx（300-399）：重定向状态码，要完成请求需要进一步操作。<br>4xx（400-499）：客户端错误状态码，表示请求有语法错误或请求无法实现。<br>5xx（500-599）：服务器错误状态码，表示服务器在处理请求时发生了错误。</p><h2 id="不常见的状态码"><a href="#不常见的状态码" class="headerlink" title="不常见的状态码"></a>不常见的状态码</h2><p>101：这是一个信息性（1xx）状态码，表示服务器理解了客户端的请求，并且通过这个状态码告知客户端它将切换到请求的协议，这通常用在WebSockets协议切换中。</p><p>104: 这是一个由Nginx定义的状态码，表示连接已经重置。这通常发生在客户端取消了请求的情况下。</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&#x27;Connection aborted.&#x27;, ConnectionResetError(104, &#x27;Connection reset by peer&#x27;))</span><br></pre></td></tr></table></figure><p>上面的错误信息就是一个例子，它表示客户端取消了请求，导致连接被重置。出现状况是 AWS Nat Gateway 会在 30 秒内关闭空闲连接，所以在这种情况下，客户端会收到一个 104 状态码。参见文档 <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">AWS Nat Gateway</a></p><p>499：这个状态码实际上不是一个官方的HTTP状态码，它是由Nginx定义的，用来表示客户端在服务器有机会发送回响应之前关闭了连接。也就是说，当服务器准备发送回响应，但是发现客户端已经关闭了连接时，Nginx会记录这个状态码。这通常发生在客户端取消了请求的情况下。</p><p>429: 这是一个客户端错误（4xx）状态码，表示请求过多。这个状态码通常用于限制客户端对服务器的请求频率，以防止服务器过载。注意这是一个常见的状态码，用于限制请求频率。</p>]]></content>
       
       
       

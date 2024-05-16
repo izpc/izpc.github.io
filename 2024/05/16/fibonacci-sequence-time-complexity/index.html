@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="斐波那契数列时间复杂度是多少？斐波那契数列（Fibonacci sequence）是这样一个数列：除了第一个和第二个数外，任意一个数都可由前两个数相加得到。数列的前几个数字是：0, 1, 1, 2, 3, 5, 8, 13, 21, 34, … 计算斐波那契数列的第n个数有多种方法，不同的方法时间复杂度也不同。  递归方法：直接按照斐波那契数列的定义进行递归计算。这种方法的时间复杂度是指数级的，大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="斐波那契数列的时间复杂度">
+<meta property="og:url" content="https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="斐波那契数列时间复杂度是多少？斐波那契数列（Fibonacci sequence）是这样一个数列：除了第一个和第二个数外，任意一个数都可由前两个数相加得到。数列的前几个数字是：0, 1, 1, 2, 3, 5, 8, 13, 21, 34, … 计算斐波那契数列的第n个数有多种方法，不同的方法时间复杂度也不同。  递归方法：直接按照斐波那契数列的定义进行递归计算。这种方法的时间复杂度是指数级的，大">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-16T08:34:22.000Z">
+<meta property="article:modified_time" content="2024-05-16T08:50:31.609Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="fibonacci">
+<meta property="article:tag" content="time-complexity">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>斐波那契数列的时间复杂度</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/05/16/git-usage-tips/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&text=斐波那契数列的时间复杂度"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&is_video=false&description=斐波那契数列的时间复杂度"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=斐波那契数列的时间复杂度&body=Check out this article: https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&name=斐波那契数列的时间复杂度&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&t=斐波那契数列的时间复杂度"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">斐波那契数列时间复杂度是多少？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%B7%E7%BB%99%E5%87%BA%E8%BF%99%E5%87%A0%E7%A7%8D%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E7%9A%84python%E4%BB%A3%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">请给出这几种时间复杂的python代码</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        斐波那契数列的时间复杂度
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-05-16T08:34:22.000Z" class="dt-published" itemprop="datePublished">2024-05-16</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/algorithm/" rel="tag">algorithm</a>, <a class="p-category" href="/tags/fibonacci/" rel="tag">fibonacci</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/time-complexity/" rel="tag">time-complexity</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="斐波那契数列时间复杂度是多少？"><a href="#斐波那契数列时间复杂度是多少？" class="headerlink" title="斐波那契数列时间复杂度是多少？"></a>斐波那契数列时间复杂度是多少？</h1><p>斐波那契数列（Fibonacci sequence）是这样一个数列：除了第一个和第二个数外，任意一个数都可由前两个数相加得到。数列的前几个数字是：0, 1, 1, 2, 3, 5, 8, 13, 21, 34, …</p>
+<p>计算斐波那契数列的第n个数有多种方法，不同的方法时间复杂度也不同。</p>
+<ol>
+<li><p><strong>递归方法</strong>：直接按照斐波那契数列的定义进行递归计算。这种方法的时间复杂度是指数级的，大约是$O(2^n)$。这是因为每增加一个数，计算量大约翻倍。</p>
+</li>
+<li><p><strong>动态规划</strong>：通过存储已经计算过的斐波那契数，避免重复计算，可以将时间复杂度降低到$O(n)$。</p>
+</li>
+<li><p><strong>矩阵快速幂</strong>：利用斐波那契数列的矩阵表示法，可以通过矩阵乘法的快速幂算法将时间复杂度降低到$O(\log n)$。</p>
+</li>
+<li><p><strong>通项公式（Binet’s formula）</strong>：斐波那契数列实际上有一个封闭形式的解，也就是Binet公式，通过这个公式可以直接计算出第n个斐波那契数，但是由于涉及到无理数的运算（黄金分割比例），在计算机上通常不会得到完全精确的结果。理论上，如果能精确计算无理数，这个方法的时间复杂度可以认为是$O(1)$，但实际上受限于浮点数的精度和大数运算的时间复杂度。</p>
+</li>
+</ol>
+<p>所以，斐波那契数列的时间复杂度取决于你选择的算法。</p>
+<h1 id="请给出这几种时间复杂的python代码"><a href="#请给出这几种时间复杂的python代码" class="headerlink" title="请给出这几种时间复杂的python代码"></a>请给出这几种时间复杂的python代码</h1><p>当然可以。以下是使用不同方法实现斐波那契数列计算第n个数的Python代码示例：</p>
+<ol>
+<li><strong>递归方法</strong>（时间复杂度约为$O(2^n)$）:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci_recursive</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fibonacci_recursive(n-<span class="number">1</span>) + fibonacci_recursive(n-<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>动态规划</strong>（时间复杂度$O(n)$）:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci_dp</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    fib = [<span class="number">0</span>] * (n+<span class="number">1</span>)</span><br><span class="line">    fib[<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, n+<span class="number">1</span>):</span><br><span class="line">        fib[i] = fib[i-<span class="number">1</span>] + fib[i-<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">return</span> fib[n]</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>矩阵快速幂</strong>（时间复杂度$O(\log n)$）:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">matrix_multiply</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> [[<span class="built_in">sum</span>(x * y <span class="keyword">for</span> x, y <span class="keyword">in</span> <span class="built_in">zip</span>(row, col)) <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">zip</span>(*b)] <span class="keyword">for</span> row <span class="keyword">in</span> a]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">matrix_power</span>(<span class="params">matrix, n</span>):</span><br><span class="line">    result = [[<span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>]]  <span class="comment"># Identity matrix</span></span><br><span class="line">    <span class="keyword">while</span> n &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">            result = matrix_multiply(result, matrix)</span><br><span class="line">        matrix = matrix_multiply(matrix, matrix)</span><br><span class="line">        n //= <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci_matrix</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    matrix = [[<span class="number">1</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">0</span>]]</span><br><span class="line">    powered_matrix = matrix_power(matrix, n-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> powered_matrix[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>通项公式（Binet’s formula）</strong>（时间复杂度接近$O(1)$，但受限于浮点数精度）:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci_binet</span>(<span class="params">n</span>):</span><br><span class="line">    sqrt_5 = math.sqrt(<span class="number">5</span>)</span><br><span class="line">    phi = (<span class="number">1</span> + sqrt_5) / <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>((phi**n - (-<span class="number">1</span>/phi)**n) / sqrt_5)</span><br></pre></td></tr></table></figure>
+
+<p>请注意，尽管Binet公式的时间复杂度接近$O(1)$，但是当n变得很大时，由于浮点数精度的限制，这个方法计算出的结果可能不准确。而且，由于使用了<code>round</code>函数和<code>**</code>运算符，实际的时间复杂度会受到Python解释器处理这些操作的方式的影响。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">斐波那契数列时间复杂度是多少？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%B7%E7%BB%99%E5%87%BA%E8%BF%99%E5%87%A0%E7%A7%8D%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E7%9A%84python%E4%BB%A3%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">请给出这几种时间复杂的python代码</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&text=斐波那契数列的时间复杂度"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&is_video=false&description=斐波那契数列的时间复杂度"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=斐波那契数列的时间复杂度&body=Check out this article: https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&title=斐波那契数列的时间复杂度"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&name=斐波那契数列的时间复杂度&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/16/fibonacci-sequence-time-complexity/&t=斐波那契数列的时间复杂度"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则git rebase 和 git merge 都是用于合并不同分支上的更改的 Git 命令，但它们以不同的方式执行此操作，影响历史的结构和清晰度。 git merge 合并提交：git merge 会创建一个新的“合并提交”来将两个分支的更改结合起来。 非线性历史：合并会保留分支的历史记录，因为它不会改变现有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 使用小技巧">
+<meta property="og:url" content="https://izpc.org/2024/05/16/git-usage-tips/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则git rebase 和 git merge 都是用于合并不同分支上的更改的 Git 命令，但它们以不同的方式执行此操作，影响历史的结构和清晰度。 git merge 合并提交：git merge 会创建一个新的“合并提交”来将两个分支的更改结合起来。 非线性历史：合并会保留分支的历史记录，因为它不会改变现有">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-16T08:26:53.000Z">
+<meta property="article:modified_time" content="2024-05-16T08:50:31.609Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="version-control">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>Git 使用小技巧</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/05/16/fibonacci-sequence-time-complexity/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/05/16/base64-create-different/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/16/git-usage-tips/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/16/git-usage-tips/&text=Git 使用小技巧"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/16/git-usage-tips/&is_video=false&description=Git 使用小技巧"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git 使用小技巧&body=Check out this article: https://izpc.org/2024/05/16/git-usage-tips/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/16/git-usage-tips/&name=Git 使用小技巧&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/16/git-usage-tips/&t=Git 使用小技巧"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git-rebase-%E5%92%8C-git-merge-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%8C%E8%AF%B7%E7%AE%80%E5%8D%95%E8%A7%A3%E9%87%8A%E4%B8%8B%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%9C%80%E8%A6%81%E9%81%B5%E5%AE%88%E7%9A%84%E5%8E%9F%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-merge"><span class="toc-number">1.0.1.</span> <span class="toc-text">git merge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-rebase"><span class="toc-number">1.0.2.</span> <span class="toc-text">git rebase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E9%81%B5%E5%AE%88%E7%9A%84%E5%8E%9F%E5%88%99"><span class="toc-number">1.0.3.</span> <span class="toc-text">需要遵守的原则</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-%E5%A6%82%E4%BD%95%E5%B0%86-project-%E4%B8%8B%E9%9D%A2%E7%9A%84%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF%E7%94%B1-main-%E6%94%B9%E4%B8%BA-master"><span class="toc-number">2.</span> <span class="toc-text">git 如何将 project 下面的默认分支由 main 改为 master</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-%E5%A6%82%E4%BD%95%E6%92%A4%E9%94%80-develop-%E4%BF%AE%E6%94%B9%EF%BC%8C%E4%BF%9D%E6%8C%81%E5%92%8Cmaster-%E5%90%8C%E6%AD%A5"><span class="toc-number">3.</span> <span class="toc-text">git 如何撤销 develop 修改，保持和master 同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E9%87%8D%E7%BD%AE%EF%BC%88Reset%EF%BC%89"><span class="toc-number">3.0.1.</span> <span class="toc-text">方法一：重置（Reset）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%90%88%E5%B9%B6%EF%BC%88Merge%EF%BC%89"><span class="toc-number">3.0.2.</span> <span class="toc-text">方法二：合并（Merge）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%8F%98%E5%9F%BA%EF%BC%88Rebase%EF%BC%89"><span class="toc-number">3.0.3.</span> <span class="toc-text">方法三：变基（Rebase）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%88%86%E6%94%AF"><span class="toc-number">3.0.4.</span> <span class="toc-text">方法四：创建一个新的分支</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Git 使用小技巧
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-05-16T08:26:53.000Z" class="dt-published" itemprop="datePublished">2024-05-16</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/ChatGPT/" rel="tag">ChatGPT</a>, <a class="p-category" href="/tags/git/" rel="tag">git</a>, <a class="p-category" href="/tags/version-control/" rel="tag">version-control</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="git-rebase-和-git-merge-有什么区别，请简单解释下，以及需要遵守的原则"><a href="#git-rebase-和-git-merge-有什么区别，请简单解释下，以及需要遵守的原则" class="headerlink" title="git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则"></a>git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则</h1><p><code>git rebase</code> 和 <code>git merge</code> 都是用于合并不同分支上的更改的 Git 命令，但它们以不同的方式执行此操作，影响历史的结构和清晰度。</p>
+<h3 id="git-merge"><a href="#git-merge" class="headerlink" title="git merge"></a>git merge</h3><ul>
+<li><strong>合并提交</strong>：<code>git merge</code> 会创建一个新的“合并提交”来将两个分支的更改结合起来。</li>
+<li><strong>非线性历史</strong>：合并会保留分支的历史记录，因为它不会改变现有的提交历史。这意味着历史是非线性的，可以清楚地看到项目历史中的分支和合并点。</li>
+<li><strong>简单易懂</strong>：对于不熟悉 Git 的人来说，合并可能更加直观，因为它保留了一个明确的分支和合并的历史记录。</li>
+</ul>
+<h3 id="git-rebase"><a href="#git-rebase" class="headerlink" title="git rebase"></a>git rebase</h3><ul>
+<li><strong>重写历史</strong>：<code>git rebase</code> 会将一个分支上的更改“重新播放”在另一个分支的顶部。这通常涉及更改提交的基础（即它们在历史中的位置）。</li>
+<li><strong>线性历史</strong>：重建创建一个更干净、更直线的提交历史，因为它看起来就像所有的更改都是按顺序一个接一个地发生的，即使它们原本是在不同的分支上开发的。</li>
+<li><strong>冲突解决</strong>：在 rebase 过程中，可能需要解决与基础分支上的新提交相关的冲突。这可能比合并时更频繁，因为每个提交都要重新应用。</li>
+</ul>
+<h3 id="需要遵守的原则"><a href="#需要遵守的原则" class="headerlink" title="需要遵守的原则"></a>需要遵守的原则</h3><ul>
+<li><strong>不要在公共分支上 rebase</strong>：如果你的分支是别人也在用的（例如 <code>main</code> 或 <code>develop</code> 分支），那么不要使用 rebase。这会改变历史，对其他人来说可能会造成混乱。</li>
+<li><strong>合并公共分支，rebase特性分支</strong>：通常，合并用于将更改从一个公共分支（如 <code>main</code>）合并到另一个公共分支（如 <code>release</code> 分支）。而 rebase 通常用于特性分支，以更新它们或准备合并到主分支。</li>
+<li><strong>清晰的历史</strong>：如果你想要一个干净、线性的历史，那么 rebase 是一个不错的选择。如果你想保留完整的历史和分支上下文，那么合并可能更合适。</li>
+<li><strong>团队协作</strong>：在团队环境中，确保所有成员都理解你们是合并还是 rebase，以及何时使用它们，以避免混乱。</li>
+<li><strong>安全操作</strong>：在执行 rebase 之前，最好创建一个新的分支或确保你的更改已经推送到远程仓库，以防万一需要恢复原始分支。</li>
+</ul>
+<p>使用这些命令时，考虑你的工作流程、团队的偏好以及你想要的提交历史的结构。在某些情况下，你可能会根据具体情况交替使用这两个命令。</p>
+<h1 id="git-如何将-project-下面的默认分支由-main-改为-master"><a href="#git-如何将-project-下面的默认分支由-main-改为-master" class="headerlink" title="git 如何将 project 下面的默认分支由 main 改为 master"></a>git 如何将 project 下面的默认分支由 main 改为 master</h1><p>在Git中，更改项目的默认分支需要几个步骤。首先，你需要在本地仓库创建新的分支（如果还没有的话），然后推送到远程仓库，最后在远程仓库（比如GitHub, GitLab, Bitbucket等）的设置中更改默认分支。</p>
+<p>下面是在命令行中执行这个操作的步骤：</p>
+<ol>
+<li><p><strong>在本地创建新的<code>master</code>分支（如果还没有的话）</strong>:</p>
+<p>如果你还没有<code>master</code>分支，你可以从<code>main</code>分支创建一个：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch master main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>将新的<code>master</code>分支推送到远程仓库</strong>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在远程仓库设置中更改默认分支</strong>:</p>
+<ul>
+<li>对于GitHub，你需要去仓库的 “Settings” -&gt; “Branches” -&gt; “Default branch”，选择<code>master</code>作为默认分支。</li>
+<li>对于GitLab，你需要去仓库的 “Settings” -&gt; “Repository” -&gt; “Default Branch”，选择<code>master</code>。</li>
+<li>对于Bitbucket，你需要去仓库的 “Repository settings” -&gt; “Branches” -&gt; “Main branch”，选择<code>master</code>。</li>
+</ul>
+</li>
+<li><p><strong>（可选）删除旧的<code>main</code>分支</strong>:</p>
+<p>如果你想要删除旧的<code>main</code>分支，你可以这样做：</p>
+<ul>
+<li><p>首先确保你不在<code>main</code>分支上：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除本地的<code>main</code>分支：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除远程的<code>main</code>分支：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin --delete main</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<p>请注意，更改默认分支可能会对其他开发者和正在进行的工作产生影响，因此在执行这些操作之前，最好通知所有相关人员。此外，如果你的仓库已经配置了CI&#x2F;CD或其他自动化系统，你可能需要更新它们以反映新的默认分支。</p>
+<h1 id="git-如何撤销-develop-修改，保持和master-同步"><a href="#git-如何撤销-develop-修改，保持和master-同步" class="headerlink" title="git 如何撤销 develop 修改，保持和master 同步"></a>git 如何撤销 develop 修改，保持和master 同步</h1><p>在 Git 中，如果你想要将 <code>develop</code> 分支的状态回退到与 <code>master</code> 分支一致的状态，你可以使用几种不同的方法。下面是一些常见的做法：</p>
+<h3 id="方法一：重置（Reset）"><a href="#方法一：重置（Reset）" class="headerlink" title="方法一：重置（Reset）"></a>方法一：重置（Reset）</h3><p>如果你想要丢弃 <code>develop</code> 分支上所有不在 <code>master</code> 分支上的提交，你可以使用 <code>reset</code> 命令。首先，确保你已经拉取了最新的 <code>master</code> 分支的代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
+
+<p>然后，切换回 <code>develop</code> 分支，并使用 <code>reset</code> 命令来重置它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
+
+<p>这会将 <code>develop</code> 分支的头指针移动到 <code>master</code> 分支的当前位置，并且丢弃 <code>develop</code> 分支上 <code>reset</code> 之后的所有更改。</p>
+<h3 id="方法二：合并（Merge）"><a href="#方法二：合并（Merge）" class="headerlink" title="方法二：合并（Merge）"></a>方法二：合并（Merge）</h3><p>如果你想要保持 <code>develop</code> 分支上的提交历史，并且将其与 <code>master</code> 同步，你可以使用 <code>merge</code> 命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git merge master</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>master</code> 分支上有 <code>develop</code> 分支上没有的提交，这些提交会被合并到 <code>develop</code> 分支上。如果 <code>develop</code> 分支上有一些额外的提交，它们将保持不变。</p>
+<h3 id="方法三：变基（Rebase）"><a href="#方法三：变基（Rebase）" class="headerlink" title="方法三：变基（Rebase）"></a>方法三：变基（Rebase）</h3><p>如果你想要重新排列 <code>develop</code> 分支上的提交，使其看起来像是基于当前 <code>master</code> 分支的最新提交，你可以使用 <code>rebase</code> 命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
+
+<p>这将会把 <code>develop</code> 分支上的所有更改应用在 <code>master</code> 分支的顶端。这个过程可能会产生冲突，需要手动解决。</p>
+<h3 id="方法四：创建一个新的分支"><a href="#方法四：创建一个新的分支" class="headerlink" title="方法四：创建一个新的分支"></a>方法四：创建一个新的分支</h3><p>如果你不想在 <code>develop</code> 分支上直接操作，你可以创建一个新的分支来替代当前的 <code>develop</code> 分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git branch -D develop  <span class="comment"># 删除旧的 develop 分支</span></span><br><span class="line">git checkout -b develop  <span class="comment"># 基于 master 创建新的 develop 分支</span></span><br><span class="line">git push -f origin develop  <span class="comment"># 强制推送新的 develop 分支到远程仓库</span></span><br></pre></td></tr></table></figure>
+
+<p>请注意，强制推送 (<code>git push -f</code>) 可能会影响其他协作者，因为它会重写远程仓库的历史。在使用强制推送之前，请确保与你的团队成员沟通。</p>
+<p>在执行上述任何操作之前，建议先备份你的分支，以防不小心丢失数据。使用 <code>git branch</code> 命令可以很容易地创建一个新的备份分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git branch backup_develop  <span class="comment"># 创建 develop 的备份</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，如果出现任何问题，你可以使用备份分支来恢复你的状态。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git-rebase-%E5%92%8C-git-merge-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%8C%E8%AF%B7%E7%AE%80%E5%8D%95%E8%A7%A3%E9%87%8A%E4%B8%8B%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%9C%80%E8%A6%81%E9%81%B5%E5%AE%88%E7%9A%84%E5%8E%9F%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">git rebase 和 git merge 有什么区别，请简单解释下，以及需要遵守的原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-merge"><span class="toc-number">1.0.1.</span> <span class="toc-text">git merge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-rebase"><span class="toc-number">1.0.2.</span> <span class="toc-text">git rebase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E9%81%B5%E5%AE%88%E7%9A%84%E5%8E%9F%E5%88%99"><span class="toc-number">1.0.3.</span> <span class="toc-text">需要遵守的原则</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-%E5%A6%82%E4%BD%95%E5%B0%86-project-%E4%B8%8B%E9%9D%A2%E7%9A%84%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF%E7%94%B1-main-%E6%94%B9%E4%B8%BA-master"><span class="toc-number">2.</span> <span class="toc-text">git 如何将 project 下面的默认分支由 main 改为 master</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-%E5%A6%82%E4%BD%95%E6%92%A4%E9%94%80-develop-%E4%BF%AE%E6%94%B9%EF%BC%8C%E4%BF%9D%E6%8C%81%E5%92%8Cmaster-%E5%90%8C%E6%AD%A5"><span class="toc-number">3.</span> <span class="toc-text">git 如何撤销 develop 修改，保持和master 同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E9%87%8D%E7%BD%AE%EF%BC%88Reset%EF%BC%89"><span class="toc-number">3.0.1.</span> <span class="toc-text">方法一：重置（Reset）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%90%88%E5%B9%B6%EF%BC%88Merge%EF%BC%89"><span class="toc-number">3.0.2.</span> <span class="toc-text">方法二：合并（Merge）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%8F%98%E5%9F%BA%EF%BC%88Rebase%EF%BC%89"><span class="toc-number">3.0.3.</span> <span class="toc-text">方法三：变基（Rebase）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E5%88%86%E6%94%AF"><span class="toc-number">3.0.4.</span> <span class="toc-text">方法四：创建一个新的分支</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/16/git-usage-tips/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/16/git-usage-tips/&text=Git 使用小技巧"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/16/git-usage-tips/&is_video=false&description=Git 使用小技巧"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git 使用小技巧&body=Check out this article: https://izpc.org/2024/05/16/git-usage-tips/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/16/git-usage-tips/&title=Git 使用小技巧"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/16/git-usage-tips/&name=Git 使用小技巧&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/16/git-usage-tips/&t=Git 使用小技巧"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

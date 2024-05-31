@@ -10,6 +10,7 @@ Airflow Helm Chart
 
 `Package Version: 1.13.1`
 
+这里有一个 github 上的[参考](https://github.com/airflow-helm/charts/blob/main/charts/airflow/docs/faq/security/ldap-oauth.md)
 
 配置 `webserver_config.py` 如下
 
@@ -88,9 +89,13 @@ PERMANENT_SESSION_LIFETIME = 86400
 
 ## Authentik 认证
 
-有趣的是 Airflow 对于集成 Authentik，有人提供了一个 [PR](https://github.com/apache/airflow/issues/35131), 但这个过于复杂，代码可以[参考](https://github.com/apache/airflow/blob/b8a83b2293f16523b40fab6035fed5f5431076af/airflow/providers/fab/auth_manager/security_manager/override.py#L2268)
+有趣的是 Airflow 对于集成 Authentik，有人提供了一个 [PR](https://github.com/apache/airflow/issues/35131), 但这个过于复杂，代码可以[参考](https://github.com/apache/airflow/blob/b8a83b2293f16523b40fab6035fed5f5431076af/airflow/providers/fab/auth_manager/security_manager/override.py#L2268)或是[参考](https://github.com/dpgaspar/Flask-AppBuilder/blob/master/flask_appbuilder/security/manager.py#L701)
 
-我采用了一个简单的方式，通过 OAuth 认证，问题的关键点是在于 userinfo/ 而不是 userinfo , 具体配置如下：
+我采用了一个简单的方式，通过 OAuth 认证，问题的关键点是在于 userinfo/ 而不是 userinfo , 否则会出现如下错误：
+
+`ERROR - OAUTH userinfo does not have username or email {}`
+
+具体配置如下：
 
 ```python
 from flask_appbuilder.security.manager import AUTH_OAUTH
@@ -197,3 +202,7 @@ config:
   api:
     auth_backends: "airflow.api.auth.backend.basic_auth"
 ```
+
+## 重置密码
+
+[参考](https://github.com/apache/airflow/issues/37009)

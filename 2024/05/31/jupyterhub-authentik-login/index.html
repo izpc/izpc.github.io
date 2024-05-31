@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="参考文档 以及一些配置 下面之前的 LDAP 和 启用的新的 OAuth 配置，可以参考一下： 注意 allow_all 为 true，表示允许所有用户登录 1234567891011121314151617181920212223242526272829303132333435363738hub:  activeServerLimit:  allowNamedServers: false  an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JupyterHub Authentik Login">
+<meta property="og:url" content="https://izpc.org/2024/05/31/jupyterhub-authentik-login/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="参考文档 以及一些配置 下面之前的 LDAP 和 启用的新的 OAuth 配置，可以参考一下： 注意 allow_all 为 true，表示允许所有用户登录 1234567891011121314151617181920212223242526272829303132333435363738hub:  activeServerLimit:  allowNamedServers: false  an">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-31T08:18:19.000Z">
+<meta property="article:modified_time" content="2024-05-31T09:03:30.578Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="authentik">
+<meta property="article:tag" content="login">
+<meta property="article:tag" content="jupyterhub">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>JupyterHub Authentik Login</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/05/31/grafana-authentik-login/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/31/jupyterhub-authentik-login/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&text=JupyterHub Authentik Login"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&is_video=false&description=JupyterHub Authentik Login"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JupyterHub Authentik Login&body=Check out this article: https://izpc.org/2024/05/31/jupyterhub-authentik-login/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&name=JupyterHub Authentik Login&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&t=JupyterHub Authentik Login"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        JupyterHub Authentik Login
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-05-31T08:18:19.000Z" class="dt-published" itemprop="datePublished">2024-05-31</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/authentik/" rel="tag">authentik</a>, <a class="p-category" href="/tags/jupyterhub/" rel="tag">jupyterhub</a>, <a class="p-category" href="/tags/login/" rel="tag">login</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><a target="_blank" rel="noopener" href="https://z2jh.jupyter.org/en/stable/administrator/authentication.html#genericoauthenticator-openid-connect">参考文档</a> 以及一些<a target="_blank" rel="noopener" href="https://oauthenticator.readthedocs.io/en/stable/reference/api/gen/oauthenticator.oauth2.html">配置</a></p>
+<p>下面之前的 LDAP 和 启用的新的 OAuth 配置，可以参考一下：</p>
+<p>注意 allow_all 为 true，表示允许所有用户登录</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">hub:</span></span><br><span class="line">  <span class="attr">activeServerLimit:</span></span><br><span class="line">  <span class="attr">allowNamedServers:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">annotations:</span> &#123;&#125;</span><br><span class="line">  <span class="attr">args:</span> []</span><br><span class="line">  <span class="attr">authenticatePrometheus:</span></span><br><span class="line">  <span class="attr">baseUrl:</span> <span class="string">&quot;/&quot;</span></span><br><span class="line">  <span class="attr">command:</span> []</span><br><span class="line">  <span class="attr">concurrentSpawnLimit:</span> <span class="number">64</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">Authenticator:</span></span><br><span class="line">      <span class="attr">admin_users:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;admin&quot;</span></span><br><span class="line">      <span class="attr">allow_all:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">auto_login:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">GenericOAuthenticator:</span></span><br><span class="line">      <span class="attr">authorize_url:</span> <span class="string">&quot;https://authentik.example.com/application/o/authorize/&quot;</span></span><br><span class="line">      <span class="attr">client_id:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="attr">client_secret:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="attr">login_service:</span> <span class="string">&quot;OAuth&quot;</span></span><br><span class="line">      <span class="attr">oauth_callback_url:</span> <span class="string">&quot;https://jupyter.example.com/hub/oauth_callback&quot;</span></span><br><span class="line">      <span class="attr">scope:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;openid&quot;</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;email&quot;</span></span><br><span class="line">      <span class="attr">token_url:</span> <span class="string">&quot;https://authentik.example.com/application/o/token/&quot;</span></span><br><span class="line">      <span class="attr">userdata_url:</span> <span class="string">&quot;https://authentik.example.com/application/o/userinfo/&quot;</span></span><br><span class="line">      <span class="attr">username_claim:</span> <span class="string">&quot;sub&quot;</span></span><br><span class="line">    <span class="attr">JupyterHub:</span></span><br><span class="line">      <span class="attr">admin_access:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">authenticator_class:</span> <span class="string">&quot;generic-oauth&quot;</span></span><br><span class="line">    <span class="attr">LDAPAuthenticator:</span></span><br><span class="line">      <span class="attr">allowed_groups:</span> []</span><br><span class="line">      <span class="attr">bind_dn_template:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;uid=&#123;username&#125;,ou=foo,ou=People,dc=example,dc=com&quot;</span></span><br><span class="line">      <span class="attr">escape_userdn:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">lookup_dn:</span> <span class="literal">false</span></span><br><span class="line">      <span class="attr">server_address:</span> <span class="string">&quot;ldap.example.com&quot;</span></span><br><span class="line">      <span class="attr">use_ssl:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/05/31/jupyterhub-authentik-login/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&text=JupyterHub Authentik Login"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&is_video=false&description=JupyterHub Authentik Login"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JupyterHub Authentik Login&body=Check out this article: https://izpc.org/2024/05/31/jupyterhub-authentik-login/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&title=JupyterHub Authentik Login"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&name=JupyterHub Authentik Login&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/05/31/jupyterhub-authentik-login/&t=JupyterHub Authentik Login"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

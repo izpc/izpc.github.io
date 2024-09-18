@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>eks-no-nodes-fix</title>
+      <link href="/2024/09/18/eks-no-nodes-fix/"/>
+      <url>/2024/09/18/eks-no-nodes-fix/</url>
+      
+        <content type="html"><![CDATA[<h1 id="EKS-Nodes-not-showing-EKS"><a href="#EKS-Nodes-not-showing-EKS" class="headerlink" title="EKS Nodes not showing EKS"></a>EKS Nodes not showing EKS</h1><p>EKS 使用管理源无法看到节点机器，这个问题需要配置 aws-auth ConfigMap 来解决。</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attr">mapRoles:</span></span><br><span class="line"><span class="string">----</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">groups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">system:bootstrappers</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">system:nodes</span></span><br><span class="line">  <span class="attr">rolearn:</span> <span class="string">arn:aws:iam::111122223333:role/my-node-role</span></span><br></pre></td></tr></table></figure><h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul><li><p><a href="https://repost.aws/questions/QUwwHQCZgxQH2pNRDVZYsKWQ/eks-nodes-not-showing">https://repost.aws/questions/QUwwHQCZgxQH2pNRDVZYsKWQ/eks-nodes-not-showing</a></p></li><li><p><a href="https://docs.aws.amazon.com/eks/latest/userguide/auth-configmap.html">https://docs.aws.amazon.com/eks/latest/userguide/auth-configmap.html</a></p></li></ul>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>JupyterHub Authentik Login</title>
       <link href="/2024/05/31/jupyterhub-authentik-login/"/>
       <url>/2024/05/31/jupyterhub-authentik-login/</url>

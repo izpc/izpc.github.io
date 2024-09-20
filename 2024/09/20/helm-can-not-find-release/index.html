@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="问题描述 为什么在 helm list 看不到 foobar ，但是部署 helm 时候 An error occurred: Unable to create the installed package for the package “jupyterhub&#x2F;jupyterhub” using the plugin “helm.packages”: internal: Unable t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="helm-can-not-find-release">
+<meta property="og:url" content="https://izpc.org/2024/09/20/helm-can-not-find-release/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="问题描述 为什么在 helm list 看不到 foobar ，但是部署 helm 时候 An error occurred: Unable to create the installed package for the package “jupyterhub&#x2F;jupyterhub” using the plugin “helm.packages”: internal: Unable t">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-20T09:55:14.000Z">
+<meta property="article:modified_time" content="2024-09-20T10:06:49.097Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>helm-can-not-find-release</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/09/20/shell-test-tcp-port/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/20/jupyterhub-profilelist-custom/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/20/helm-can-not-find-release/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&text=helm-can-not-find-release"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&is_video=false&description=helm-can-not-find-release"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=helm-can-not-find-release&body=Check out this article: https://izpc.org/2024/09/20/helm-can-not-find-release/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&name=helm-can-not-find-release&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/20/helm-can-not-find-release/&t=helm-can-not-find-release"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">解决方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%982"><span class="toc-number">3.</span> <span class="toc-text">问题2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%952"><span class="toc-number">4.</span> <span class="toc-text">解决方法2</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        helm-can-not-find-release
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-20T09:55:14.000Z" class="dt-published" itemprop="datePublished">2024-09-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><blockquote>
+<p>为什么在 helm list 看不到 foobar ，但是部署 helm 时候 An error occurred: Unable to create the installed package for the package “jupyterhub&#x2F;jupyterhub” using the plugin “helm.packages”: internal: Unable to create helm release “foobar” in the namespace “jupyter”: release datacenter already exists.</p>
+</blockquote>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在使用 Helm 部署应用时遇到这种情况，通常是因为 Helm 认为某个 release 已经存在，但该 release 并没有在 <code>helm list</code> 中显示。这种情况可能由多种原因引起。以下是一些可能的原因及相应的解决方法：</p>
+<ol>
+<li><p><strong>Release 已经存在但状态异常</strong>：</p>
+<ul>
+<li>可能该 release 处于失败状态或部分删除状态，导致 Helm 认为它仍然存在。</li>
+<li>你可以尝试使用以下命令查看所有 release，包括失败的：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm list --all-namespaces --all</span><br></pre></td></tr></table></figure></li>
+<li>如果找到了对应的 release，可以选择删除它：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm delete &lt;release-name&gt; --namespace &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>Helm release 信息未正确清理</strong>：</p>
+<ul>
+<li>有时候 Helm 的 release 信息在 Kubernetes 集群中没有被正确清理。</li>
+<li>你可以手动删除对应的 ConfigMap 或 Secret（根据 Helm 版本不同，可能存储在 ConfigMap 或 Secret 中）：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get configmap -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete configmap &lt;configmap-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure>
+或者：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get secret -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete secret &lt;secret-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>Helm 版本问题</strong>：</p>
+<ul>
+<li>确保 Helm 客户端和服务器端（Tiller，Helm 2 中使用）版本兼容。</li>
+<li>尝试升级到最新版本的 Helm。</li>
+</ul>
+</li>
+<li><p><strong>命名空间问题</strong>：</p>
+<ul>
+<li>确保你在正确的命名空间中操作。使用 <code>-n &lt;namespace&gt;</code> 指定命名空间。</li>
+<li>例如：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm list -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>Helm release 名称冲突</strong>：</p>
+<ul>
+<li>确保没有其他 Helm release 使用相同的名称。在不同的命名空间中也可能会有名称冲突。</li>
+</ul>
+</li>
+<li><p><strong>Helm release 数据库损坏</strong>：</p>
+<ul>
+<li>如果 Helm release 数据库损坏，可能需要修复或重建数据库。</li>
+<li>可以尝试 Helm 的 <code>--force</code> 选项重新部署：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm upgrade --install --force &lt;release-name&gt; &lt;chart&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<p>总结起来，你可以按照以下步骤进行排查和解决：</p>
+<ol>
+<li><p>查看所有 release，包括失败的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm list --all-namespaces --all</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果找到了对应的 release，删除它：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm delete &lt;release-name&gt; --namespace &lt;namespace&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果仍然存在问题，手动删除对应的 ConfigMap 或 Secret：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get configmap -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete configmap &lt;configmap-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get secret -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete secret &lt;secret-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确保 Helm 客户端和服务器端版本兼容，并且在正确的命名空间中操作。</p>
+</li>
+</ol>
+<p>通过以上步骤，你应该能够解决 Helm release 已经存在但在 <code>helm list</code> 中看不到的问题。</p>
+<h1 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h1><blockquote>
+<p>刚才的问题查找到状态是 pending-upgrade，如何解决？</p>
+</blockquote>
+<h1 id="解决方法2"><a href="#解决方法2" class="headerlink" title="解决方法2"></a>解决方法2</h1><p>当 Helm release 处于 <code>pending-upgrade</code> 状态时，通常意味着上一次升级操作未能成功完成，导致 release 处于一种未决状态。要解决这个问题，可以尝试以下步骤：</p>
+<ol>
+<li><p><strong>检查 Helm release 状态</strong>：</p>
+<ul>
+<li>使用以下命令查看 release 的详细状态：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm status &lt;release-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>强制升级或回滚</strong>：</p>
+<ul>
+<li>如果 release 卡在 <code>pending-upgrade</code> 状态，可以尝试强制升级或回滚到之前的版本。</li>
+<li>强制升级：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm upgrade --install --force &lt;release-name&gt; &lt;chart&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+<li>回滚到之前的版本（假设之前的版本是 1）：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm rollback &lt;release-name&gt; 1 -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>删除并重新部署</strong>：</p>
+<ul>
+<li>如果强制升级或回滚未能解决问题，可以尝试删除该 release 并重新部署。</li>
+<li>删除 release：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm delete &lt;release-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+<li>确保 release 相关的资源（如 ConfigMap 或 Secret）已被完全删除：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl get configmap -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete configmap &lt;configmap-name&gt; -n &lt;namespace&gt;</span><br><span class="line">kubectl get secret -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete secret &lt;secret-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+<li>重新部署：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install &lt;release-name&gt; &lt;chart&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>清理 Helm release 信息</strong>：</p>
+<ul>
+<li>有时需要手动清理 Helm release 信息，尤其是当 release 处于未决状态时。</li>
+<li>手动删除 release 相关的 ConfigMap 或 Secret：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl get configmap -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete configmap &lt;configmap-name&gt; -n &lt;namespace&gt;</span><br><span class="line">kubectl get secret -n &lt;namespace&gt; | grep &lt;release-name&gt;</span><br><span class="line">kubectl delete secret &lt;secret-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>检查 Kubernetes 资源状态</strong>：</p>
+<ul>
+<li>有时 Kubernetes 资源本身可能处于未决状态，这也可能导致 Helm release 卡住。</li>
+<li>使用以下命令检查相关资源的状态：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods -n &lt;namespace&gt;</span><br><span class="line">kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<p>通过以上步骤，你应该能够解决 Helm release 处于 <code>pending-upgrade</code> 状态的问题。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">解决方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%982"><span class="toc-number">3.</span> <span class="toc-text">问题2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%952"><span class="toc-number">4.</span> <span class="toc-text">解决方法2</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/20/helm-can-not-find-release/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&text=helm-can-not-find-release"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&is_video=false&description=helm-can-not-find-release"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=helm-can-not-find-release&body=Check out this article: https://izpc.org/2024/09/20/helm-can-not-find-release/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&title=helm-can-not-find-release"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/20/helm-can-not-find-release/&name=helm-can-not-find-release&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/20/helm-can-not-find-release/&t=helm-can-not-find-release"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

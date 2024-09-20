@@ -37,3 +37,43 @@ kubectl get jobs --namespace your-namespace -o name | grep 'foo-bar' | xargs kub
 
 将 `your-namespace` 替换为实际的命名空间名称。
 
+
+# k8s 如何设置默认 storageClass
+
+在 Kubernetes 中，设置默认的 StorageClass 可以通过以下步骤实现：
+
+1. **查看现有的 StorageClass：**
+
+   首先，查看集群中已经存在的 StorageClass：
+
+   ```sh
+   kubectl get storageclass
+   ```
+
+2. **设置默认 StorageClass：**
+
+   假设你想将某个名为 `my-storage-class` 的 StorageClass 设置为默认的，你需要编辑该 StorageClass 的配置，并添加 `storageclass.kubernetes.io/is-default-class` 注解。
+
+   ```sh
+   kubectl patch storageclass my-storage-class -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+   ```
+
+3. **移除其他 StorageClass 的默认注解：**
+
+   如果之前已经有其他 StorageClass 被设置为默认，你需要移除它们的默认注解。假设另一个名为 `old-default-storage-class` 的 StorageClass 之前被设置为默认：
+
+   ```sh
+   kubectl patch storageclass old-default-storage-class -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+   ```
+
+4. **验证设置：**
+
+   再次查看 StorageClass 列表，确认新的默认 StorageClass 设置成功：
+
+   ```sh
+   kubectl get storageclass
+   ```
+
+   你应该会看到 `my-storage-class` 的 `storageclass.kubernetes.io/is-default-class` 注解被设置为 `true`。
+
+通过这些步骤，你可以成功地设置或更改 Kubernetes 集群中的默认 StorageClass。

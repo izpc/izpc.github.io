@@ -104,3 +104,8 @@ CREATE TABLE default.metrics_raw_v2_dist ON CLUSTER 'sentry-clickhouse'
 ENGINE = Distributed('sentry-clickhouse', 'default', 'metrics_raw_v2_local', sipHash64('timeseries_id'));
 
 ```
+
+
+# 替代方案
+
+[GlitchTip](https://glitchtip.com/) 是一个 Sentry 的替代方案，可以考虑使用。

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="如何启动私有 Jenkinsdocker-compose.yml 配置文件 1234567891011121314151617181920212223version: &#x27;3&#x27;services:  jenkins:    image: docker.foobar.com&#x2F;jenkins    user: root    build: .    restart: always">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how-to-start-private-jenkins">
+<meta property="og:url" content="https://izpc.org/2024/09/29/how-to-start-private-jenkins/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="如何启动私有 Jenkinsdocker-compose.yml 配置文件 1234567891011121314151617181920212223version: &#x27;3&#x27;services:  jenkins:    image: docker.foobar.com&#x2F;jenkins    user: root    build: .    restart: always">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-29T07:22:18.000Z">
+<meta property="article:modified_time" content="2024-09-29T08:30:54.601Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta property="article:tag" content="jenkins">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>how-to-start-private-jenkins</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/09/29/how-to-start-private-ldap/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/29/how-to-start-private-nexus-repo/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/29/how-to-start-private-jenkins/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&text=how-to-start-private-jenkins"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&is_video=false&description=how-to-start-private-jenkins"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=how-to-start-private-jenkins&body=Check out this article: https://izpc.org/2024/09/29/how-to-start-private-jenkins/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&name=how-to-start-private-jenkins&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&t=how-to-start-private-jenkins"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%90%AF%E5%8A%A8%E7%A7%81%E6%9C%89-Jenkins"><span class="toc-number">1.</span> <span class="toc-text">如何启动私有 Jenkins</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        how-to-start-private-jenkins
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-29T07:22:18.000Z" class="dt-published" itemprop="datePublished">2024-09-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/docker/" rel="tag">docker</a>, <a class="p-category" href="/tags/jenkins/" rel="tag">jenkins</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="如何启动私有-Jenkins"><a href="#如何启动私有-Jenkins" class="headerlink" title="如何启动私有 Jenkins"></a>如何启动私有 Jenkins</h1><p><code>docker-compose.yml</code> 配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">jenkins:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker.foobar.com/jenkins</span></span><br><span class="line">    <span class="attr">user:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">extra_hosts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;bitbucket.foobar.com:127.0.0.1&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;127.0.0.1:8080:8080&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;127.0.0.1:50000:50000&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;HOME&#125;/jenkins/jenkins_home:/var/jenkins_home</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;HOME&#125;/.docker:/root/.docker</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;HOME&#125;/.ssh:/root/.ssh</span></span><br><span class="line">      <span class="comment">#- /usr/bin/docker:/usr/bin/docker</span></span><br><span class="line">      <span class="comment">#- /usr/bin/docker-compose:/usr/bin/docker-compose</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment">#- JENKINS_OPTS=&quot;--sessionTimeout=0&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">JENKINS_OPTS=--sessionTimeout=43200</span> <span class="string">--sessionEviction=604800</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="section">upstream</span> jenkins &#123;</span><br><span class="line">  <span class="attribute">keepalive</span> <span class="number">32</span>; <span class="comment"># keepalive connections</span></span><br><span class="line">  <span class="attribute">server</span> <span class="number">127.0.0.1:8080</span>; <span class="comment"># jenkins ip and port</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Required for Jenkins websocket agents</span></span><br><span class="line"><span class="attribute">map</span> <span class="variable">$http_upgrade</span> <span class="variable">$connection_upgrade</span> &#123;</span><br><span class="line">  <span class="attribute">default</span> upgrade;</span><br><span class="line">  &#x27;&#x27; close;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;       <span class="comment"># Listen on port 80 for IPv4 requests</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">server_name</span>     deploy.example.com local.example.com;  <span class="comment"># replace &#x27;jenkins.example.com&#x27; with your server domain name</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># this is the jenkins web root directory</span></span><br><span class="line">  <span class="comment"># (mentioned in the output of &quot;systemctl cat jenkins&quot;)</span></span><br><span class="line">  <span class="attribute">access_log</span>      /var/log/nginx/jenkins.access.log;</span><br><span class="line">  <span class="attribute">error_log</span>       /var/log/nginx/jenkins.<span class="literal">error</span>.log;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># pass through headers from Jenkins that Nginx considers invalid</span></span><br><span class="line">  <span class="attribute">ignore_invalid_headers</span> <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">  <span class="section">location</span> <span class="regexp">~ &quot;^/static/[0-9a-fA-F]</span>&#123;8&#125;\/(.*)$&quot; &#123;</span><br><span class="line">    <span class="comment"># rewrite all static files into requests to the root</span></span><br><span class="line">    <span class="comment"># E.g /static/12345678/css/something.css will become /css/something.css</span></span><br><span class="line">    <span class="attribute">rewrite</span> <span class="string">&quot;^/static/[0-9a-fA-F]&#123;8&#125;\/(.*)&quot;</span> /<span class="variable">$1</span> <span class="literal">last</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="section">location</span> /userContent &#123;</span><br><span class="line">    <span class="comment"># have nginx handle all the static requests to userContent folder</span></span><br><span class="line">    <span class="comment"># note : This is the $JENKINS_HOME dir</span></span><br><span class="line">    <span class="attribute">root</span> /var/lib/jenkins/;</span><br><span class="line">    <span class="attribute">if</span> (!-f <span class="variable">$request_filename</span>)&#123;</span><br><span class="line">      <span class="comment"># this file does not exist, might be a directory or a /**view** url</span></span><br><span class="line">      <span class="attribute">rewrite</span> (.*) /<span class="variable">$1</span> <span class="literal">last</span>;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">sendfile</span> <span class="literal">on</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="section">location</span> / &#123;</span><br><span class="line">      <span class="comment"># allow 1.1.1.1; # allow ip address to access the site</span></span><br><span class="line">      <span class="comment"># deny all;</span></span><br><span class="line"></span><br><span class="line">      <span class="attribute">sendfile</span> <span class="literal">off</span>;</span><br><span class="line">      <span class="attribute">proxy_pass</span>         http://jenkins;</span><br><span class="line">      <span class="attribute">proxy_redirect</span>     default;</span><br><span class="line">      <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">      <span class="comment"># Required for Jenkins websocket agents</span></span><br><span class="line">      <span class="attribute">proxy_set_header</span>   Connection        <span class="variable">$connection_upgrade</span>;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   Upgrade           <span class="variable">$http_upgrade</span>;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   Host              <span class="variable">$host</span>;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   X-Real-IP         <span class="variable">$remote_addr</span>;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   X-Forwarded-For   <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">      <span class="attribute">proxy_max_temp_file_size</span> <span class="number">0</span>;</span><br><span class="line">      <span class="comment">#this is the maximum upload size</span></span><br><span class="line">      <span class="attribute">client_max_body_size</span>       <span class="number">10m</span>;</span><br><span class="line">      <span class="attribute">client_body_buffer_size</span>    <span class="number">128k</span>;</span><br><span class="line">      <span class="attribute">proxy_connect_timeout</span>      <span class="number">90</span>;</span><br><span class="line">      <span class="attribute">proxy_send_timeout</span>         <span class="number">90</span>;</span><br><span class="line">      <span class="attribute">proxy_read_timeout</span>         <span class="number">90</span>;</span><br><span class="line">      <span class="attribute">proxy_buffering</span>            <span class="literal">off</span>;</span><br><span class="line">      <span class="attribute">proxy_request_buffering</span>    <span class="literal">off</span>; <span class="comment"># Required for HTTP CLI commands</span></span><br><span class="line">      <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;&quot;</span>; <span class="comment"># Clear for keepalive</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl; <span class="comment"># managed by Certbot</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/letsencrypt/live/repo.example.com/fullchain.pem; <span class="comment"># managed by Certbot</span></span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/repo.example.com/privkey.pem; <span class="comment"># managed by Certbot</span></span><br><span class="line">    <span class="attribute">include</span> /etc/letsencrypt/options-ssl-nginx.conf; <span class="comment"># managed by Certbot</span></span><br><span class="line">    <span class="attribute">ssl_dhparam</span> /etc/letsencrypt/ssl-dhparams.pem; <span class="comment"># managed by Certbot</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">if</span> (<span class="variable">$host</span> = deploy.example.com) &#123;</span><br><span class="line">        <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">    &#125; <span class="comment"># managed by Certbot</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">if</span> (<span class="variable">$host</span> = local.example.com) &#123;</span><br><span class="line">        <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">    &#125; <span class="comment"># managed by Certbot</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attribute">listen</span>          <span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">server_name</span>     deploy.example.com local.example.com;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">404</span>; <span class="comment"># managed by Certbot</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%90%AF%E5%8A%A8%E7%A7%81%E6%9C%89-Jenkins"><span class="toc-number">1.</span> <span class="toc-text">如何启动私有 Jenkins</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">反向代理</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/29/how-to-start-private-jenkins/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&text=how-to-start-private-jenkins"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&is_video=false&description=how-to-start-private-jenkins"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=how-to-start-private-jenkins&body=Check out this article: https://izpc.org/2024/09/29/how-to-start-private-jenkins/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&title=how-to-start-private-jenkins"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&name=how-to-start-private-jenkins&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/29/how-to-start-private-jenkins/&t=how-to-start-private-jenkins"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

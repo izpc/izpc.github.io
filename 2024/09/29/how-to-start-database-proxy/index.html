@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798user www-data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how-to-start-database-proxy">
+<meta property="og:url" content="https://izpc.org/2024/09/29/how-to-start-database-proxy/index.html">
+<meta property="og:site_name" content="编码漫谈">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798user www-data">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-29T07:34:32.000Z">
+<meta property="article:modified_time" content="2024-09-29T08:30:54.601Z">
+<meta property="article:author" content="半瓶水研究员">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.png">
+        
+      
+    
+    <!-- title -->
+    <title>how-to-start-database-proxy</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="编码漫谈" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/09/29/how-to-start-custom-vaultwarden/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/09/29/how-to-start-private-ldap/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/29/how-to-start-database-proxy/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&text=how-to-start-database-proxy"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&is_video=false&description=how-to-start-database-proxy"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=how-to-start-database-proxy&body=Check out this article: https://izpc.org/2024/09/29/how-to-start-database-proxy/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&name=how-to-start-database-proxy&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/29/how-to-start-database-proxy/&t=how-to-start-database-proxy"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        how-to-start-database-proxy
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">半瓶水研究员</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-09-29T07:34:32.000Z" class="dt-published" itemprop="datePublished">2024-09-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span> www-data;</span><br><span class="line"><span class="attribute">worker_processes</span> auto;</span><br><span class="line"><span class="attribute">pid</span> /run/nginx.pid;</span><br><span class="line"><span class="attribute">include</span> /etc/nginx/modules-enabled/<span class="regexp">*.conf</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">10240</span>;</span><br><span class="line">    <span class="comment"># multi_accept on;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">allow</span> all;</span><br><span class="line"></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line">    <span class="comment"># Basic Settings</span></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">## Start nexus https://help.sonatype.com/repomanager3/planning-your-implementation/run-behind-a-reverse-proxy</span></span><br><span class="line">        <span class="attribute">proxy_send_timeout</span> <span class="number">120</span>;</span><br><span class="line">        <span class="attribute">proxy_read_timeout</span> <span class="number">300</span>;</span><br><span class="line">        <span class="attribute">proxy_buffering</span>    <span class="literal">off</span>;</span><br><span class="line">        <span class="attribute">proxy_request_buffering</span> <span class="literal">off</span>;</span><br><span class="line">        <span class="comment">#keepalive_timeout  5 5;</span></span><br><span class="line">        <span class="comment">#tcp_nodelay        on;</span></span><br><span class="line">        <span class="comment">## End nexus</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">sendfile</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">tcp_nopush</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">65</span>;</span><br><span class="line">    <span class="attribute">types_hash_max_size</span> <span class="number">2048</span>;</span><br><span class="line">    <span class="comment"># server_tokens off;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># server_names_hash_bucket_size 64;</span></span><br><span class="line">    <span class="comment"># server_name_in_redirect off;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">include</span> /etc/nginx/mime.types;</span><br><span class="line">    <span class="attribute">default_type</span> application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line">    <span class="comment"># SSL Settings</span></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>; <span class="comment"># Dropping SSLv3, ref: POODLE</span></span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line">    <span class="comment"># Logging Settings</span></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span> /var/log/nginx/access.log;</span><br><span class="line">    <span class="attribute">error_log</span> /var/log/nginx/<span class="literal">error</span>.log;</span><br><span class="line"></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line">    <span class="comment"># Gzip Settings</span></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># gzip_vary on;</span></span><br><span class="line">    <span class="comment"># gzip_proxied any;</span></span><br><span class="line">    <span class="comment"># gzip_comp_level 6;</span></span><br><span class="line">    <span class="comment"># gzip_buffers 16 8k;</span></span><br><span class="line">    <span class="comment"># gzip_http_version 1.1;</span></span><br><span class="line">    <span class="comment"># gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line">    <span class="comment"># Virtual Host Configs</span></span><br><span class="line">    <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">include</span> /etc/nginx/conf.d/<span class="regexp">*.conf</span>;</span><br><span class="line">    <span class="attribute">include</span> /etc/nginx/sites-enabled/*;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">stream</span> &#123;</span><br><span class="line">    <span class="attribute">log_format</span> proxy <span class="string">&#x27;<span class="variable">$remote_addr</span> [<span class="variable">$time_local</span>] &#x27;</span></span><br><span class="line">                 <span class="string">&#x27;<span class="variable">$protocol</span> <span class="variable">$status</span> <span class="variable">$bytes_sent</span> <span class="variable">$bytes_received</span> &#x27;</span></span><br><span class="line">                 <span class="string">&#x27;<span class="variable">$session_time</span> &quot;<span class="variable">$upstream_addr</span>&quot; &#x27;</span></span><br><span class="line">                 <span class="string">&#x27;&quot;<span class="variable">$upstream_bytes_sent</span>&quot; &quot;<span class="variable">$upstream_bytes_received</span>&quot; &quot;<span class="variable">$upstream_connect_time</span>&quot;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span> /var/log/nginx/tcp-access.log proxy ;</span><br><span class="line">    <span class="attribute">open_log_file_cache</span> <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># mysql: 3306</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">33078</span>;</span><br><span class="line">        <span class="attribute">proxy_pass</span> your.domain.com:<span class="number">3306</span>;</span><br><span class="line">        <span class="attribute">proxy_timeout</span> <span class="number">300m</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://izpc.org/2024/09/29/how-to-start-database-proxy/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&text=how-to-start-database-proxy"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&is_video=false&description=how-to-start-database-proxy"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=how-to-start-database-proxy&body=Check out this article: https://izpc.org/2024/09/29/how-to-start-database-proxy/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&title=how-to-start-database-proxy"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://izpc.org/2024/09/29/how-to-start-database-proxy/&name=how-to-start-database-proxy&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://izpc.org/2024/09/29/how-to-start-database-proxy/&t=how-to-start-database-proxy"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-2024
+    半瓶水研究员
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
